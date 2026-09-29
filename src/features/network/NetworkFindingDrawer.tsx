@@ -53,7 +53,7 @@ export function NetworkFindingDrawer({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl h-full bg-white border-l-4 border-black p-5 shadow-[-8px_0px_0px_#000] overflow-y-auto space-y-4"
+        className="w-full max-w-full sm:max-w-xl h-full bg-white border-l-0 sm:border-l-4 border-black p-4 sm:p-5 shadow-none sm:shadow-[-8px_0px_0px_#000] overflow-y-auto space-y-4"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drawer Header */}

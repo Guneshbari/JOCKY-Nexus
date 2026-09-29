@@ -58,14 +58,14 @@ export function EvidenceDetailDrawer({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl h-full bg-white border-l-4 border-black shadow-[-8px_0px_0px_#000] flex flex-col justify-between overflow-hidden"
+        className="w-full max-w-full sm:max-w-xl md:max-w-2xl h-full bg-white border-l-0 sm:border-l-4 border-black shadow-none sm:shadow-[-8px_0px_0px_#000] flex flex-col justify-between overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drawer Header */}
-        <div className="p-4 bg-zinc-900 text-white flex items-center justify-between border-b-3 border-black">
-          <div className="flex items-center gap-2">
-            <Database className="w-4 h-4 text-amber-400" />
-            <span className="text-xs font-black uppercase tracking-wider">
+        <div className="p-3.5 sm:p-4 bg-zinc-900 text-white flex items-center justify-between border-b-3 border-black shrink-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <Database className="w-4 h-4 text-amber-400 shrink-0" />
+            <span className="text-xs font-black uppercase tracking-wider truncate">
               EVIDENCE ARTIFACT INSPECTOR // {evidence.id}
             </span>
           </div>

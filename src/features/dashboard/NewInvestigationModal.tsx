@@ -74,32 +74,32 @@ export function NewInvestigationModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs select-none">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs select-none">
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="w-full max-w-xl border-4 border-black bg-white shadow-[8px_8px_0px_#000] overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+        className="w-full max-w-xl max-h-[92dvh] flex flex-col border-4 border-black bg-white shadow-[8px_8px_0px_#000] overflow-hidden animate-in fade-in zoom-in-95 duration-150"
       >
         {/* Modal Header */}
-        <div className="p-4 border-b-4 border-black bg-amber-300 flex items-center justify-between">
+        <div className="p-3.5 sm:p-4 border-b-4 border-black bg-amber-300 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
-            <ShieldAlert className="w-5 h-5 text-black" />
-            <h2 id="modal-title" className="font-mono text-base font-black uppercase text-black tracking-wide">
+            <ShieldAlert className="w-5 h-5 text-black shrink-0" />
+            <h2 id="modal-title" className="font-mono text-sm sm:text-base font-black uppercase text-black tracking-wide truncate">
               Initialize Forensic Campaign
             </h2>
           </div>
           <button
             onClick={closeModal}
             aria-label="Close modal"
-            className="w-8 h-8 border-2 border-black bg-white flex items-center justify-center font-bold hover:bg-rose-400 hover:text-white transition-colors"
+            className="w-8 h-8 border-2 border-black bg-white flex items-center justify-center font-bold hover:bg-rose-400 hover:text-white transition-colors shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3 sm:space-y-4 overflow-y-auto flex-1">
           <div className="p-3 border-2 border-black bg-cyan-50 text-xs font-mono font-bold text-zinc-900">
             ⚡ <span className="underline">Forensic Intent Driven</span>: Specify natural investigative intent. The Adaptive Engine compiles it into synchronized cross-endpoint inspection commands.
           </div>
