@@ -19,9 +19,9 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useInvestigationStore } from "@/store/investigationStore"
 import { formatDate } from "@/lib/formatters"
-import { InvestigationStatus, Severity } from "@/types/investigation"
+import { InvestigationStatus, InvestigationSeverity } from "@/types/investigation"
 
-type SeverityFilter = "ALL" | Severity
+type SeverityFilter = "ALL" | InvestigationSeverity
 type StatusFilter = "ALL" | InvestigationStatus
 
 export function InvestigationOperationsTable() {

@@ -62,6 +62,7 @@ const DEMO_STEPS = [
 ]
 
 interface JudgeDemoControllerProps {
+  isOpen?: boolean
   onClose: () => void
 }
 

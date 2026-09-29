@@ -1,51 +1,31 @@
-import React from "react"
+import React, { Suspense } from "react"
 import { Metadata } from "next"
-import {
-  DashboardHeader,
-  SystemOverviewCards,
-  ActiveInvestigationsTable,
-  AdaptiveExecutionStatus,
-  EndpointHealthCard,
-  EvidenceIntegrityCard,
-  MitreCoverageCard,
-  NetworkSnapshotCard,
-  InvestigationActivityTimeline,
-  NewInvestigationModal,
-} from "@/features/dashboard"
+import { CommandCenterWorkspace } from "@/features/dashboard"
 
 export const metadata: Metadata = {
-  title: "Command Console | JOCKY Nexus",
-  description: "Operational posture, active investigations, endpoint health, and adaptive forensic execution.",
+  title: "Command Center | JOCKY Nexus",
+  description:
+    "Aggregated forensic operations, cross-platform adaptive execution intelligence, verifiable evidence integrity, and unified investigation analytics.",
+}
+
+function CommandCenterFallback() {
+  return (
+    <div className="p-12 border-4 border-black bg-white shadow-[8px_8px_0px_#000] font-mono text-center space-y-4">
+      <div className="inline-block animate-spin w-10 h-10 border-4 border-black border-t-amber-400 rounded-full" />
+      <h3 className="text-lg font-black uppercase text-black">
+        INITIALIZING JOCKY NEXUS COMMAND CENTER...
+      </h3>
+      <p className="text-xs font-bold text-zinc-600">
+        Aggregating operational posture, adaptive profiles, and cryptographic evidence seals.
+      </p>
+    </div>
+  )
 }
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6 pb-12">
-      {/* 1. Command Header with Operational Posture & Simulation Controls */}
-      <DashboardHeader />
-
-      {/* 2. System Overview: 6 Core Posture Metrics */}
-      <SystemOverviewCards />
-
-      {/* 3. Core USP Showcase: Adaptive Forensic Execution Pipeline */}
-      <AdaptiveExecutionStatus />
-
-      {/* 4. Active Investigations: Interactive Table */}
-      <ActiveInvestigationsTable />
-
-      {/* 5. 4-Card Analytical Grid: Endpoints, Evidence, MITRE, Network */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <EndpointHealthCard />
-        <EvidenceIntegrityCard />
-        <MitreCoverageCard />
-        <NetworkSnapshotCard />
-      </div>
-
-      {/* 6. Recent Investigation Activity: Forensic Timeline */}
-      <InvestigationActivityTimeline />
-
-      {/* 7. Interactive Modal: New Investigation Launcher */}
-      <NewInvestigationModal />
-    </div>
+    <Suspense fallback={<CommandCenterFallback />}>
+      <CommandCenterWorkspace />
+    </Suspense>
   )
 }

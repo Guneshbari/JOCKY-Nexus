@@ -5,11 +5,10 @@ import Link from "next/link"
 import { Database, Hash, CheckCircle2, ShieldCheck, ArrowRight, Layers } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { useEvidenceStore } from "@/store/evidenceStore"
 import { useInvestigationStore } from "@/store/investigationStore"
 
 export function EvidenceIntegrityAnalytics() {
-  const artifacts = useEvidenceStore((state) => state.artifacts)
+  const artifacts = useInvestigationStore((state) => state.evidenceItems)
   const activeInvestigation = useInvestigationStore((state) => state.activeInvestigation)
   const currentInvId = activeInvestigation?.id ?? "inv-2026-001"
 

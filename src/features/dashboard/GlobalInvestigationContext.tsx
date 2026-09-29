@@ -109,11 +109,11 @@ export function GlobalInvestigationContext() {
         </div>
 
         <div className="p-2 bg-white border border-black">
-          <span className="text-[9px] text-zinc-500 font-bold block uppercase">Status / Priority</span>
+          <span className="text-[9px] text-zinc-500 font-bold block uppercase">Status / Severity</span>
           <div className="flex items-center gap-1 mt-0.5">
             <Badge variant="neutral" className="text-[9px] px-1 py-0">{currentInv.status}</Badge>
-            <Badge variant={currentInv.priority === "HIGH" ? "danger" : "warning"} className="text-[9px] px-1 py-0">
-              {currentInv.priority}
+            <Badge variant={currentInv.severity === "CRITICAL" ? "danger" : currentInv.severity === "HIGH" ? "warning" : "default"} className="text-[9px] px-1 py-0">
+              {currentInv.severity}
             </Badge>
           </div>
         </div>

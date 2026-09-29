@@ -12,6 +12,7 @@ export * from "./NewInvestigationModal"
 
 // Phase 7 Command Center Exports
 export * from "./CommandCenterHeader"
+export * from "./CommandCenterWorkspace"
 export * from "./CommandMetricStrip"
 export * from "./GlobalInvestigationContext"
 export * from "./JudgeDemoController"

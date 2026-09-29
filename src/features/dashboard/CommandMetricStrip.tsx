@@ -25,7 +25,7 @@ export function CommandMetricStrip() {
 
   const stats = useMemo(() => {
     const active = investigations.filter(
-      (i) => i.status === "ACTIVE" || i.status === "IN_PROGRESS"
+      (i) => i.status === "IN_PROGRESS" || i.status === "READY" || i.status === "QUEUED"
     ).length
     const completed = investigations.filter((i) => i.status === "COMPLETED").length
     const totalEvidence = evidenceItems.length
