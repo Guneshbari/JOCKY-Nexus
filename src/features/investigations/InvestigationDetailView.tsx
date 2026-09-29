@@ -291,7 +291,7 @@ export function InvestigationDetailView({ investigation }: InvestigationDetailVi
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex items-center gap-2 border-b-3 border-black overflow-x-auto pb-1">
+      <div className="flex items-center gap-1.5 sm:gap-2 border-b-3 border-black overflow-x-auto pb-1 min-w-0 max-w-full">
         {(
           [
             { id: "OVERVIEW", label: "OVERVIEW & INTENT" },

@@ -78,8 +78,8 @@ export function EndpointProfileTable({
       </div>
 
       {/* Responsive Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs border-collapse">
+      <div className="overflow-x-auto w-full min-w-0">
+        <table className="w-full min-w-[700px] text-left text-xs border-collapse">
           <thead>
             <tr className="border-b-2 border-black bg-zinc-100 text-[10px] font-black text-zinc-600 uppercase">
               <th className="p-2 border-r border-black">Endpoint Node</th>

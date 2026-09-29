@@ -389,8 +389,8 @@ export function ProvenanceAuditWorkspace() {
           </div>
         </CardHeader>
 
-        <CardContent className="p-0 overflow-x-auto">
-          <table className="w-full text-left font-mono text-xs border-collapse">
+        <CardContent className="p-0 overflow-x-auto w-full min-w-0">
+          <table className="w-full min-w-[760px] text-left font-mono text-xs border-collapse">
             <thead>
               <tr className="border-b-2 border-black bg-zinc-100 font-black uppercase text-zinc-700">
                 <th className="p-3">Block #</th>

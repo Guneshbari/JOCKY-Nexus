@@ -325,7 +325,7 @@ export function NetworkConnectionGraph({
       </div>
 
       {/* React Flow Container */}
-      <div className="h-[440px] w-full border-3 border-black bg-zinc-100 relative">
+      <div className="h-[360px] sm:h-[440px] w-full min-w-0 border-3 border-black bg-zinc-100 relative overflow-hidden">
         <ReactFlow
           nodes={nodes}
           edges={edges}

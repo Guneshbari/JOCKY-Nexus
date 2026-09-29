@@ -372,15 +372,15 @@ export function AdaptiveExecutionGraph({
   }, [])
 
   return (
-    <div className="border-3 border-black bg-white shadow-[4px_4px_0px_#000] font-mono space-y-3 p-4">
+    <div className="border-3 border-black bg-white shadow-[4px_4px_0px_#000] font-mono space-y-3 p-3 sm:p-4 min-w-0 w-full overflow-hidden">
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b-2 border-black">
-        <div className="flex items-center gap-2">
-          <GitBranch className="w-4 h-4 text-black" />
-          <span className="text-xs font-black uppercase text-black">
+        <div className="flex items-center gap-2 min-w-0">
+          <GitBranch className="w-4 h-4 text-black shrink-0" />
+          <span className="text-xs font-black uppercase text-black truncate">
             ADAPTIVE EXECUTION DECISION GRAPH
           </span>
-          <Badge variant="cyber">REACT FLOW</Badge>
+          <Badge variant="cyber" className="shrink-0">REACT FLOW</Badge>
         </div>
 
         <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-bold">
@@ -389,7 +389,7 @@ export function AdaptiveExecutionGraph({
       </div>
 
       {/* React Flow Container */}
-      <div className="h-[360px] w-full border-2 border-black bg-zinc-50 relative overflow-hidden">
+      <div className="h-[320px] sm:h-[360px] w-full min-w-0 border-2 border-black bg-zinc-50 relative overflow-hidden">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -397,7 +397,7 @@ export function AdaptiveExecutionGraph({
           onEdgesChange={onEdgesChange}
           onNodeClick={onNodeClick}
           fitView
-          fitViewOptions={{ padding: 0.15 }}
+          fitViewOptions={{ padding: 0.2 }}
           minZoom={0.5}
           maxZoom={1.5}
         >

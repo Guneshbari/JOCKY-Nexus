@@ -44,15 +44,15 @@ export function MitreTechniqueMatrix({
   }, [grouped])
 
   return (
-    <div className="border-4 border-black bg-white shadow-[6px_6px_0px_#000] font-mono p-4 space-y-3">
-      <div className="flex items-center justify-between pb-2 border-b-2 border-black">
-        <div className="flex items-center gap-2">
-          <Grid className="w-5 h-5 text-black" />
-          <h3 className="text-sm font-black uppercase text-black">
+    <div className="border-4 border-black bg-white shadow-[6px_6px_0px_#000] font-mono p-3 sm:p-4 space-y-3 min-w-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b-2 border-black">
+        <div className="flex items-center gap-2 min-w-0">
+          <Grid className="w-5 h-5 text-black shrink-0" />
+          <h3 className="text-sm font-black uppercase text-black truncate">
             Interactive ATT&CK TTP Correlation Matrix
           </h3>
         </div>
-        <span className="text-[10px] bg-amber-300 px-2 py-0.5 border border-black font-black">
+        <span className="text-[10px] bg-amber-300 px-2 py-0.5 border border-black font-black shrink-0">
           CLICK ANY TECHNIQUE TO INSPECT
         </span>
       </div>

@@ -18,15 +18,15 @@ export function MitreTacticCoverage() {
   const isMounted = useIsMounted()
 
   return (
-    <div className="border-4 border-black bg-white shadow-[6px_6px_0px_#000] font-mono p-4 space-y-3">
-      <div className="flex items-center justify-between pb-2 border-b-2 border-black">
-        <div className="flex items-center gap-2">
-          <Layers className="w-5 h-5 text-orange-600" />
-          <h3 className="text-sm font-black uppercase text-black">
+    <div className="border-4 border-black bg-white shadow-[6px_6px_0px_#000] font-mono p-3 sm:p-4 space-y-3 min-w-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b-2 border-black">
+        <div className="flex items-center gap-2 min-w-0">
+          <Layers className="w-5 h-5 text-orange-600 shrink-0" />
+          <h3 className="text-sm font-black uppercase text-black truncate">
             ATT&CK Tactical Domain Coverage
           </h3>
         </div>
-        <span className="text-[10px] bg-orange-200 px-2 py-0.5 border border-orange-600 font-black">
+        <span className="text-[10px] bg-orange-200 px-2 py-0.5 border border-orange-600 font-black shrink-0">
           8 TACTICAL CATEGORIES
         </span>
       </div>

@@ -197,8 +197,8 @@ export function EvidenceExplorer({
       </div>
 
       {/* Table Container */}
-      <div className="overflow-x-auto border-2 border-black">
-        <table className="w-full text-left text-xs border-collapse">
+      <div className="overflow-x-auto border-2 border-black w-full min-w-0">
+        <table className="w-full min-w-[900px] text-left text-xs border-collapse">
           <thead>
             <tr className="border-b-2 border-black bg-zinc-100 text-[10px] font-black uppercase text-zinc-700">
               <th className="p-2.5 border-r border-black">Artifact ID</th>

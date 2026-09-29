@@ -111,20 +111,20 @@ export function ProvenanceChain({ evidence, merkleRoot }: ProvenanceChainProps) 
   const activeNode = nodes.find((n) => n.id === selectedNodeId) ?? nodes[4]
 
   return (
-    <div className="border-3 border-black bg-white p-4 shadow-[4px_4px_0px_#000] font-mono space-y-3">
+    <div className="border-3 border-black bg-white p-3 sm:p-4 shadow-[4px_4px_0px_#000] font-mono space-y-3 min-w-0 w-full overflow-hidden">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b-2 border-black">
-        <div className="flex items-center gap-2">
-          <GitBranch className="w-4 h-4 text-black" />
-          <span className="text-xs font-black uppercase text-black">
+        <div className="flex items-center gap-2 min-w-0">
+          <GitBranch className="w-4 h-4 text-black shrink-0" />
+          <span className="text-xs font-black uppercase text-black truncate">
             PROVENANCE CHAIN & EVIDENCE LINEAGE // {evidence.id}
           </span>
         </div>
-        <Badge variant="cyber">NVPL-CHAIN LOCKED</Badge>
+        <Badge variant="cyber" className="shrink-0">NVPL-CHAIN LOCKED</Badge>
       </div>
 
       {/* Horizontal Flow Container */}
-      <div className="overflow-x-auto pb-2">
+      <div className="overflow-x-auto pb-2 w-full min-w-0">
         <div className="flex items-center gap-1.5 min-w-[780px] p-2 bg-zinc-50 border-2 border-black">
           {nodes.map((node, index) => {
             const isSelected = selectedNodeId === node.id
