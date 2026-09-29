@@ -44,7 +44,7 @@ const navItems = [
     label: "Endpoints",
     href: "/endpoints",
     icon: Server,
-    badge: "12",
+    badge: "5",
     badgeVariant: "default" as const,
   },
   {

@@ -53,6 +53,16 @@ export function AdaptiveExecutionWorkspace() {
     currentInvestigation ??
     investigations[0]
 
+  // Sync initialCaseId from URL with store
+  React.useEffect(() => {
+    if (initialCaseId && (!currentInvestigation || currentInvestigation.id !== initialCaseId)) {
+      const match = investigations.find((i) => i.id === initialCaseId)
+      if (match) {
+        selectInvestigation(match.id)
+      }
+    }
+  }, [initialCaseId, currentInvestigation, investigations, selectInvestigation])
+
   // Endpoints targeted by this investigation
   const targetEndpoints: Endpoint[] = (
     activeInvestigation.targetEndpointIds.length > 0

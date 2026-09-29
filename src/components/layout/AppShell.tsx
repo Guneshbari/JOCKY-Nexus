@@ -3,12 +3,16 @@
 import React from "react"
 import { Sidebar } from "@/components/navigation/Sidebar"
 import { Header } from "@/components/navigation/Header"
+import { JudgeDemoController } from "@/features/dashboard/JudgeDemoController"
+import { useUIStore } from "@/store/uiStore"
 
 interface AppShellProps {
   children: React.ReactNode
 }
 
 export function AppShell({ children }: AppShellProps) {
+  const { isJudgeDemoActive } = useUIStore()
+
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-zinc-100 font-sans text-black">
       {/* Neo-Brutalist Sidebar */}
@@ -20,8 +24,9 @@ export function AppShell({ children }: AppShellProps) {
         <Header />
 
         {/* Scrollable Page Canvas */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8 bg-[#F4F4F0] bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:16px_16px]">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 bg-[#F4F4F0] bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:16px_16px]">
           <div className="max-w-7xl mx-auto space-y-6">
+            {isJudgeDemoActive && <JudgeDemoController />}
             {children}
           </div>
         </main>

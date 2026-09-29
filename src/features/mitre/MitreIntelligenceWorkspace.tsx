@@ -47,7 +47,12 @@ export function MitreIntelligenceWorkspace() {
   const selectedTechnique = useMemo(() => {
     if (userSelectedTechnique) return userSelectedTechnique
     if (queryTechniqueId) {
-      return MOCK_MITRE_TECHNIQUES.find((t) => t.id === queryTechniqueId) ?? null
+      const q = queryTechniqueId.toUpperCase().trim()
+      return (
+        MOCK_MITRE_TECHNIQUES.find((t) => t.id === q) ??
+        MOCK_MITRE_TECHNIQUES.find((t) => t.id.startsWith(q + ".") || t.id.startsWith(q)) ??
+        null
+      )
     }
     return null
   }, [userSelectedTechnique, queryTechniqueId])

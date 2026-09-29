@@ -48,7 +48,7 @@ const modules = [
     icon: Server,
     color: "bg-emerald-300",
     description: "Cross-platform endpoint management, instant host isolation, and forensic readiness scores.",
-    badge: "12 HOSTS",
+    badge: "5 HOSTS",
   },
   {
     title: "Evidence Vault",
@@ -145,7 +145,7 @@ export default function HomePage() {
         <div className="border-3 border-black bg-white p-4 shadow-[4px_4px_0px_#000]">
           <span className="text-xs font-mono font-bold text-zinc-500 uppercase">Monitored Hosts</span>
           <div className="text-3xl font-black text-black mt-1">
-            {MOCK_DASHBOARD_STATS.compromisedEndpoints + 10}
+            5
           </div>
           <span className="text-[11px] font-mono text-zinc-700">Windows, Linux, macOS</span>
         </div>

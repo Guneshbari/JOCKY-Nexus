@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import {
   Layers,
   Wand2,
@@ -14,8 +15,12 @@ import { useInvestigationStore } from "@/store/investigationStore"
 import { useEndpointStore } from "@/store/endpointStore"
 import { StatusPill } from "@/components/status/StatusPill"
 
-export default function InvestigationsPage() {
-  const [activeTab, setActiveTab] = useState<"campaigns" | "builder">("campaigns")
+function InvestigationsContent() {
+  const searchParams = useSearchParams()
+  const queryTab = searchParams.get("tab")
+
+  const [tabOverride, setTabOverride] = useState<"campaigns" | "builder" | null>(null)
+  const activeTab = tabOverride ?? (queryTab === "builder" ? "builder" : "campaigns")
 
   const investigations = useInvestigationStore((state) => state.investigations)
   const endpoints = useEndpointStore((state) => state.endpoints)
@@ -56,7 +61,7 @@ export default function InvestigationsPage() {
         <div className="flex items-center gap-2 bg-zinc-100 p-1.5 border-3 border-black shadow-[3px_3px_0px_#000] shrink-0">
           <button
             type="button"
-            onClick={() => setActiveTab("campaigns")}
+            onClick={() => setTabOverride("campaigns")}
             className={`flex items-center gap-2 px-3 py-1.5 font-black text-xs uppercase border-2 border-black transition-all cursor-pointer ${
               activeTab === "campaigns"
                 ? "bg-black text-amber-300 shadow-[2px_2px_0px_#000]"
@@ -69,7 +74,7 @@ export default function InvestigationsPage() {
 
           <button
             type="button"
-            onClick={() => setActiveTab("builder")}
+            onClick={() => setTabOverride("builder")}
             className={`flex items-center gap-2 px-3 py-1.5 font-black text-xs uppercase border-2 border-black transition-all cursor-pointer ${
               activeTab === "builder"
                 ? "bg-amber-400 text-black shadow-[2px_2px_0px_#000]"
@@ -119,14 +124,30 @@ export default function InvestigationsPage() {
 
       {/* Main Workspace Render */}
       {activeTab === "campaigns" ? (
-        <InvestigationList onOpenBuilder={() => setActiveTab("builder")} />
+        <InvestigationList onOpenBuilder={() => setTabOverride("builder")} />
       ) : (
         <InvestigationBuilder
           onInvestigationCreated={() => {
-            // Once generated, stay in builder or switch if needed
+            // Once generated, switch back to campaigns view
+            setTabOverride("campaigns")
           }}
         />
       )}
     </div>
+  )
+}
+
+export default function InvestigationsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 border-4 border-black bg-white font-mono text-center shadow-[6px_6px_0px_#000]">
+          <div className="inline-block animate-spin w-8 h-8 border-4 border-black border-t-amber-400 rounded-full" />
+          <p className="text-xs font-bold uppercase mt-2">Loading Investigations Console...</p>
+        </div>
+      }
+    >
+      <InvestigationsContent />
+    </Suspense>
   )
 }

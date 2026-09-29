@@ -29,6 +29,7 @@ export function EvidenceIntelligenceWorkspace() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const queryInvestigationId = searchParams.get("id")
+  const queryArtifactId = searchParams.get("artifact") || searchParams.get("evidence")
 
   const {
     investigations,
@@ -62,6 +63,18 @@ export function EvidenceIntelligenceWorkspace() {
       }
     }
   }, [queryInvestigationId, activeInvestigation, investigations, selectInvestigation, generateSimulatedEvidence])
+
+  // Sync artifact from query parameter if provided
+  useEffect(() => {
+    if (queryArtifactId && selectedEvidenceId !== queryArtifactId) {
+      const match = evidenceItems.find(
+        (e) => e.id.toLowerCase() === queryArtifactId.toLowerCase()
+      )
+      if (match) {
+        selectEvidence(match.id)
+      }
+    }
+  }, [queryArtifactId, selectedEvidenceId, evidenceItems, selectEvidence])
 
   // Selected evidence item
   const selectedEvidence = useMemo(() => {

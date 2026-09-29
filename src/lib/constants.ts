@@ -40,7 +40,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Endpoints",
     href: "/endpoints",
     icon: "Server",
-    badge: "12 HOSTS",
+    badge: "5 HOSTS",
     description: "Enterprise endpoint inventory and agent status",
   },
   {

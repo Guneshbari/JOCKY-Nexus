@@ -1,9 +1,8 @@
 "use client"
 
-import React, { useState } from "react"
+import React from "react"
 import {
   CommandCenterHeader,
-  JudgeDemoController,
   GlobalInvestigationContext,
   CommandMetricStrip,
   AdaptiveExecutionAnalytics,
@@ -16,27 +15,20 @@ import {
   UnifiedActivityTimeline,
   NewInvestigationModal,
 } from "@/features/dashboard"
+import { useUIStore } from "@/store/uiStore"
 
 export function CommandCenterWorkspace() {
-  const [isJudgeDemoActive, setIsJudgeDemoActive] = useState<boolean>(false)
+  const { isJudgeDemoActive, toggleJudgeDemo } = useUIStore()
 
   return (
     <div className="space-y-6 pb-12 font-mono">
       {/* 1. Definitive Command Center Header */}
       <CommandCenterHeader
         isJudgeDemoActive={isJudgeDemoActive}
-        onToggleJudgeDemo={() => setIsJudgeDemoActive((prev) => !prev)}
+        onToggleJudgeDemo={toggleJudgeDemo}
       />
 
-      {/* 2. Interactive Judge Demo 8-Step Walkthrough Stepper */}
-      {isJudgeDemoActive && (
-        <JudgeDemoController
-          isOpen={isJudgeDemoActive}
-          onClose={() => setIsJudgeDemoActive(false)}
-        />
-      )}
-
-      {/* 3. Active Case Operational Context Banner with Switcher */}
+      {/* 2. Active Case Operational Context Banner with Switcher */}
       <GlobalInvestigationContext />
 
       {/* 4. Global 8-Card Metric Strip (Cases, Endpoints, Evidence, Integrity, TTPs, Flows, Provenance) */}
