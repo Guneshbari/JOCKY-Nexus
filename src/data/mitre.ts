@@ -1,0 +1,73 @@
+import { MitreTechnique, MitreMatrixSummary } from "@/types/mitre"
+
+export const MOCK_MITRE_SUMMARY: MitreMatrixSummary = {
+  totalTechniquesDetected: 6,
+  tacticsCoveredCount: 5,
+  topThreatVector: "Credential Access & Defense Evasion",
+  coveragePercentage: 74,
+}
+
+export const MOCK_MITRE_TECHNIQUES: MitreTechnique[] = [
+  {
+    id: "T1558.003",
+    name: "Steal or Forge Kerberos Tickets: Kerberoasting",
+    tactic: "Credential Access",
+    description: "Adversaries may request service tickets (TGS) for service principal names (SPNs) and attempt to crack them offline.",
+    detectionCount: 18,
+    severity: "HIGH",
+    affectedEndpoints: ["ep-dc-01", "ep-ws-44"],
+    evidenceArtifactIds: ["art-001"],
+    subTechniques: ["T1558.001", "T1558.002"],
+  },
+  {
+    id: "T1055.001",
+    name: "Process Injection: Dynamic-link Library Injection",
+    tactic: "Defense Evasion",
+    description: "Adversaries may inject dynamic-link libraries (DLLs) into processes to evade process-based defenses and elevate privileges.",
+    detectionCount: 4,
+    severity: "CRITICAL",
+    affectedEndpoints: ["ep-ws-44"],
+    evidenceArtifactIds: ["art-002"],
+    subTechniques: ["T1055.002", "T1055.004"],
+  },
+  {
+    id: "T1059.001",
+    name: "Command and Scripting Interpreter: PowerShell",
+    tactic: "Execution",
+    description: "Adversaries may abuse PowerShell commands and scripts for execution and fileless operation.",
+    detectionCount: 31,
+    severity: "HIGH",
+    affectedEndpoints: ["ep-ws-44"],
+    evidenceArtifactIds: ["art-002"],
+  },
+  {
+    id: "T1071.001",
+    name: "Application Layer Protocol: Web Protocols",
+    tactic: "Command and Control",
+    description: "Adversaries may communicate using application layer protocols (HTTP/HTTPS) to blend with existing traffic.",
+    detectionCount: 142,
+    severity: "HIGH",
+    affectedEndpoints: ["ep-ws-44", "ep-sec-proxy"],
+    evidenceArtifactIds: [],
+  },
+  {
+    id: "T1490",
+    name: "Inhibit System Recovery",
+    tactic: "Impact",
+    description: "Adversaries may delete or remove built-in operating system recovery options and volume shadow copies.",
+    detectionCount: 2,
+    severity: "CRITICAL",
+    affectedEndpoints: ["ep-ws-44"],
+    evidenceArtifactIds: ["art-003"],
+  },
+  {
+    id: "T1562.001",
+    name: "Impair Defenses: Disable or Modify Tools (eBPF)",
+    tactic: "Defense Evasion",
+    description: "Adversaries may modify security tools or kernel tracing mechanisms to avoid detection.",
+    detectionCount: 1,
+    severity: "CRITICAL",
+    affectedEndpoints: ["ep-app-09"],
+    evidenceArtifactIds: ["art-004"],
+  },
+]
