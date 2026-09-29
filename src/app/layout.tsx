@@ -14,10 +14,32 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "JOCKY Nexus | Multi-Endpoint Forensic Investigation",
-  description: "One Investigation. Multiple Endpoints. Verifiable Evidence.",
+  title: {
+    default: "JOCKY Nexus — Adaptive Digital Forensics & Evidence Intelligence",
+    template: "%s | JOCKY Nexus",
+  },
+  description: "One Investigation. Multiple Endpoints. Verifiable Evidence. Forensic Intent → Adaptive Execution → Verifiable Evidence.",
+  keywords: [
+    "Digital Forensics",
+    "Evidence Intelligence",
+    "Adaptive Execution",
+    "JOCKY Nexus",
+    "Incident Response",
+    "MITRE ATT&CK",
+    "Chain of Custody",
+    "Merkle Provenance",
+  ],
   icons: {
     icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/logo/jocky-nexus.svg",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "JOCKY Nexus",
+    title: "JOCKY Nexus — Adaptive Digital Forensics & Evidence Intelligence",
+    description: "One Investigation. Multiple Endpoints. Verifiable Evidence.",
   },
 }
 

@@ -1,5 +1,12 @@
 import React, { Suspense } from "react"
+import { Metadata } from "next"
 import { MitreIntelligenceWorkspace } from "@/features/mitre"
+
+export const metadata: Metadata = {
+  title: "MITRE ATT&CK Matrix",
+  description:
+    "Enterprise adversary tactic & technique matrix, automated evidence correlation, and attack path visualization.",
+}
 
 function MitreWorkspaceFallback() {
   return (

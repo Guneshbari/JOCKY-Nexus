@@ -13,6 +13,7 @@ export * from "./InvestigationFilters"
 export * from "./InvestigationBuilder"
 export * from "./InvestigationList"
 export * from "./InvestigationDetailView"
+export * from "./InvestigationsWorkspace"
 
 export const INVESTIGATIONS_FEATURE_META = {
   name: "investigations",

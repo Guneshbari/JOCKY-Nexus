@@ -1,5 +1,12 @@
 import React, { Suspense } from "react"
+import { Metadata } from "next"
 import { ProvenanceAuditWorkspace } from "@/features/provenance"
+
+export const metadata: Metadata = {
+  title: "Provenance Audit Ledger",
+  description:
+    "Immutable Merkle tree proofs, tamper-evident cryptographic block trail, and witness quorum consensus verification.",
+}
 
 function ProvenanceWorkspaceFallback() {
   return (

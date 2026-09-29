@@ -1,5 +1,12 @@
 import React, { Suspense } from "react"
+import { Metadata } from "next"
 import { EvidenceIntelligenceWorkspace } from "@/features/evidence"
+
+export const metadata: Metadata = {
+  title: "Evidence Intelligence",
+  description:
+    "Cryptographically verified forensic evidence vault, SHA-256 integrity seals, and Merkle leaf verification.",
+}
 
 function EvidenceWorkspaceFallback() {
   return (

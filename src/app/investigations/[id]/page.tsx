@@ -19,6 +19,12 @@ export default function InvestigationDetailPage() {
     investigations.find((i) => i.id === id) ??
     MOCK_INVESTIGATIONS.find((i) => i.id === id)
 
+  React.useEffect(() => {
+    if (investigation) {
+      document.title = `${investigation.id}: ${investigation.title.slice(0, 30)} | JOCKY Nexus`
+    }
+  }, [investigation])
+
   if (!investigation) {
     return (
       <div className="space-y-6 font-mono">

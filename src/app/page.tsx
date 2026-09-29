@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Metadata } from "next"
 import {
   ShieldAlert,
   Server,
@@ -16,6 +17,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { StatusPill } from "@/components/status/StatusPill"
 import { BRANDING } from "@/lib/constants"
 import { MOCK_DASHBOARD_STATS } from "@/data/dashboard"
+
+export const metadata: Metadata = {
+  title: "Overview",
+  description: "One Investigation. Multiple Endpoints. Verifiable Evidence. Forensic Intent → Adaptive Execution → Verifiable Evidence.",
+}
 
 const modules = [
   {

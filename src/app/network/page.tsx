@@ -1,5 +1,12 @@
 import React, { Suspense } from "react"
+import { Metadata } from "next"
 import { NetworkIntelligenceWorkspace } from "@/features/network"
+
+export const metadata: Metadata = {
+  title: "Network Forensics",
+  description:
+    "Interactive network topology, egress C2 beacon analysis, and inter-endpoint lateral movement tracking.",
+}
 
 function NetworkWorkspaceFallback() {
   return (

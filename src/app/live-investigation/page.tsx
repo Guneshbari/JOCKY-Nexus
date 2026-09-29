@@ -1,5 +1,12 @@
 import React, { Suspense } from "react"
+import { Metadata } from "next"
 import { AdaptiveExecutionWorkspace } from "@/features/execution/AdaptiveExecutionWorkspace"
+
+export const metadata: Metadata = {
+  title: "Live Adaptive Execution",
+  description:
+    "Real-time adaptive forensic execution pipeline, endpoint profiling, heuristic branching, and dynamic collector assignment.",
+}
 
 export default function LiveInvestigationPage() {
   return (
