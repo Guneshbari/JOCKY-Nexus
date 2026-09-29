@@ -115,4 +115,24 @@ Push the repository to GitHub and import it directly into [Vercel](https://verce
 - **Framework Preset**: Next.js
 - **Build Command**: `npm run build`
 - **Output Directory**: `.next`
-- No environment variables required for prototype mode.
+- No external environment variables or database credentials required for prototype mode.
+
+---
+
+## 🏆 Judge Demonstration Guide (5–10 Minutes)
+
+Follow this structured presentation script to showcase the complete USP of JOCKY Nexus:
+
+| Step | Action & Route | Core Demonstration Narrative |
+| :---: | :--- | :--- |
+| **01** | **Open `/dashboard`** | **Command Posture**: Highlight the 8 operational metric cards, active multi-endpoint investigations, and the core USP: *Forensic Intent → Adaptive Execution → Verifiable Evidence*. |
+| **02** | **Open `/investigations`** | **Define Forensic Intent**: Show natural language prompt entry, target selection, and forensic constraint toggles in the Investigation Builder. |
+| **03** | **Generate JOCKY IR** | **Platform-Independent IR**: Demonstrate compilation of human intent into structured JOCKY DSL and abstract syntax tree (AST). |
+| **04** | **Open `/live-investigation`** | **Adaptive Profiling**: Inspect how one investigation automatically branches into `PROFILE-A` (Windows DC), `PROFILE-B` (Quarantined WS), `PROFILE-C` (Ubuntu eBPF), and `PROFILE-D` (Debian Proxy) without agent recompilation. |
+| **05** | **Simulate Collection** | **Evidence Pipeline**: Advance through volatile acquisition, normalization, hashing, and Merkle leaf insertion. |
+| **06** | **Open `/evidence`** | **Cryptographic Integrity**: Inspect sealed artifacts (e.g. LSASS memory dump, $MFT), verify SHA-256 hashes, and examine Merkle proofs with zero hash drift. |
+| **07** | **Open `/provenance`** | **Tamper-Evident Ledger**: Trace immutable chain of custody to Block #1045 with 3/3 witness quorum consensus and zero-tamper guarantee. |
+| **08** | **Open `/network`** | **Network Forensics**: Explore the interactive React Flow topology, observe lateral PsExec hops, and inspect flagged C2 beacon flows (`185.220.101.5:443`). |
+| **09** | **Open `/mitre`** | **ATT&CK Alignment**: Correlate artifacts to 27 enterprise techniques across 8 tactics with 96% detection confidence (e.g. T1558.003 Kerberoasting). |
+| **10** | **Return to `/dashboard`** | **Command Consolidation**: Verify that all telemetry, evidence seals, and case states reflect the completed end-to-end investigation. |
+
