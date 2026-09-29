@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { StatusPill } from "@/components/status/StatusPill"
+import { JockyEmblem } from "@/components/ui/JockyLogo"
 import { BRANDING } from "@/lib/constants"
 import { MOCK_DASHBOARD_STATS } from "@/data/dashboard"
 
@@ -106,13 +107,24 @@ export default function HomePage() {
             <StatusPill label="AUDIT CHAIN: SEALED" status="verified" />
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-black leading-none">
-            {BRANDING.name}
-          </h1>
-
-          <p className="text-lg md:text-xl font-bold font-mono text-zinc-800">
-            {BRANDING.tagline}
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-5 pt-2">
+            <div className="p-3 border-3 border-black bg-amber-400 shadow-[4px_4px_0px_#000] inline-flex items-center justify-center shrink-0">
+              <JockyEmblem size={68} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2.5">
+                <span className="font-black text-3xl sm:text-5xl md:text-6xl tracking-tight text-black leading-none">
+                  JOCKY
+                </span>
+                <span className="font-mono font-black text-xl sm:text-3xl md:text-4xl bg-black text-cyan-400 px-2 sm:px-3 py-0.5 sm:py-1 border-2 border-black shadow-[3px_3px_0px_#00F0FF] leading-none">
+                  NEXUS
+                </span>
+              </div>
+              <p className="text-base sm:text-xl font-bold font-mono text-zinc-800 mt-2">
+                {BRANDING.tagline}
+              </p>
+            </div>
+          </div>
 
           <div className="p-3 border-2 border-black bg-amber-100 font-mono text-xs font-bold inline-block shadow-[3px_3px_0px_#000]">
             ⚡ USP: {BRANDING.usp}

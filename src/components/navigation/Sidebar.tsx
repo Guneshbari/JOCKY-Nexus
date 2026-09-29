@@ -14,11 +14,11 @@ import {
   FileCheck,
   ChevronLeft,
   ChevronRight,
-  Shield,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useUIStore } from "@/store/uiStore"
 import { Badge } from "@/components/ui/badge"
+import { JockyLogo, JockyEmblem } from "@/components/ui/JockyLogo"
 
 const navItems = [
   {
@@ -98,20 +98,13 @@ export function Sidebar() {
         )}
       >
       {/* Branding Header */}
-      <div className="flex items-center justify-between p-4 border-b-4 border-black bg-amber-400">
-        <Link href="/dashboard" className="flex items-center gap-3 overflow-hidden">
-          <div className="w-10 h-10 border-2 border-black bg-black flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#fff]">
-            <Shield className="w-6 h-6 text-cyan-400" />
-          </div>
-          {isSidebarOpen && (
-            <div className="flex flex-col truncate">
-              <span className="font-black text-lg tracking-wider text-black leading-none">
-                JOCKY
-                <span className="bg-black text-cyan-400 px-1 py-0.5 ml-1 text-sm">NEXUS</span>
-              </span>
-              <span className="text-[10px] font-mono font-bold text-zinc-900 mt-1 truncate">
-                ADAPTIVE FORENSIC ENGINE
-              </span>
+      <div className="flex items-center justify-between p-3.5 border-b-4 border-black bg-amber-400">
+        <Link href="/dashboard" className="flex items-center gap-3 overflow-hidden group">
+          {isSidebarOpen ? (
+            <JockyLogo variant="full" size="md" showSubtitle={true} />
+          ) : (
+            <div className="w-10 h-10 flex items-center justify-center shrink-0">
+              <JockyEmblem size={34} />
             </div>
           )}
         </Link>

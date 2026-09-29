@@ -1,9 +1,11 @@
 "use client"
 
 import React from "react"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Terminal, Cpu, Compass, Menu } from "lucide-react"
 import { StatusPill } from "@/components/status/StatusPill"
+import { JockyEmblem } from "@/components/ui/JockyLogo"
 import { useUIStore } from "@/store/uiStore"
 import { BRANDING } from "@/lib/constants"
 
@@ -33,6 +35,15 @@ export function Header() {
         >
           <Menu className="w-4 h-4 text-black" />
         </button>
+
+        {/* Brand Emblem Link */}
+        <Link
+          href="/dashboard"
+          className="hidden xs:flex items-center shrink-0 hover:scale-105 transition-transform"
+          title="JOCKY Nexus Command Center"
+        >
+          <JockyEmblem size={28} />
+        </Link>
 
         <div className="flex items-center gap-1.5 sm:gap-2 font-mono text-xs sm:text-sm font-black border-2 border-black bg-amber-300 px-2 sm:px-3 py-1 shadow-[2px_2px_0px_#000] min-w-0">
           <Terminal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black shrink-0" />

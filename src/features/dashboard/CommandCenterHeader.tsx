@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { StatusPill } from "@/components/status/StatusPill"
+import { JockyEmblem } from "@/components/ui/JockyLogo"
 import { DashboardRefreshButton } from "./DashboardRefreshButton"
 import { useUIStore } from "@/store/uiStore"
 import { useInvestigationStore } from "@/store/investigationStore"
@@ -45,9 +46,14 @@ export function CommandCenterHeader({
             />
           </div>
 
-          <h1 className="text-xl sm:text-3xl md:text-5xl font-black uppercase tracking-tight text-black flex items-center gap-3">
-            <span>JOCKY NEXUS COMMAND</span>
-          </h1>
+          <div className="flex items-center gap-3">
+            <div className="p-1 sm:p-1.5 border-2 border-black bg-amber-400 shadow-[2px_2px_0px_#000] shrink-0">
+              <JockyEmblem size={38} />
+            </div>
+            <h1 className="text-xl sm:text-3xl md:text-5xl font-black uppercase tracking-tight text-black">
+              JOCKY NEXUS COMMAND
+            </h1>
+          </div>
 
           <p className="text-xs sm:text-sm font-bold text-zinc-700 max-w-3xl">
             Cross-platform forensic operations, adaptive execution, evidence integrity, and investigation intelligence.
