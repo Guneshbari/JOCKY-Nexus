@@ -257,7 +257,7 @@ export function NetworkConnectionGraph({
             <h3 className="text-sm font-black uppercase text-black">
               Interactive Network Connection Graph
             </h3>
-            <Badge variant="cyan" className="text-[10px]">
+            <Badge variant="cyber" className="text-[10px]">
               REACT FLOW
             </Badge>
           </div>

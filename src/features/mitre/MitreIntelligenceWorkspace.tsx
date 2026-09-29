@@ -83,7 +83,7 @@ export function MitreIntelligenceWorkspace() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="cyan" className="text-xs px-2 py-0.5 font-black uppercase tracking-wider">
+              <Badge variant="cyber" className="text-xs px-2 py-0.5 font-black uppercase tracking-wider">
                 MITRE ATT&CK INTELLIGENCE
               </Badge>
               <Badge variant="success" className="text-xs">
