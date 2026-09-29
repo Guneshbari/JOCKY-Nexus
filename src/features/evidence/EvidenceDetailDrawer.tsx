@@ -27,6 +27,14 @@ export function EvidenceDetailDrawer({
   const [copiedHash, setCopiedHash] = useState(false)
   const [copiedId, setCopiedId] = useState(false)
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [onClose])
+
   if (!evidence) return null
 
   const handleCopyHash = () => {
@@ -42,8 +50,17 @@ export function EvidenceDetailDrawer({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-end font-mono">
-      <div className="w-full max-w-2xl h-full bg-white border-l-4 border-black shadow-[-8px_0px_0px_#000] flex flex-col justify-between overflow-hidden">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Evidence Artifact Details"
+      className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-end font-mono"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-2xl h-full bg-white border-l-4 border-black shadow-[-8px_0px_0px_#000] flex flex-col justify-between overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Drawer Header */}
         <div className="p-4 bg-zinc-900 text-white flex items-center justify-between border-b-3 border-black">
           <div className="flex items-center gap-2">

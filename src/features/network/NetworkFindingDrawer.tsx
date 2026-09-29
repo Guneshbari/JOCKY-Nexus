@@ -26,6 +26,14 @@ export function NetworkFindingDrawer({
 }: NetworkFindingDrawerProps) {
   const [copied, setCopied] = useState(false)
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [onClose])
+
   if (!connection) return null
 
   const handleCopyIp = () => {
@@ -37,8 +45,17 @@ export function NetworkFindingDrawer({
   const isFlagged = connection.status === "FLAGGED"
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-xs font-mono">
-      <div className="w-full max-w-xl h-full bg-white border-l-4 border-black p-5 shadow-[-8px_0px_0px_#000] overflow-y-auto space-y-4">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Network Forensic Finding Details"
+      className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-xs font-mono"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-xl h-full bg-white border-l-4 border-black p-5 shadow-[-8px_0px_0px_#000] overflow-y-auto space-y-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Drawer Header */}
         <div className="flex items-start justify-between pb-3 border-b-3 border-black">
           <div className="space-y-1">
