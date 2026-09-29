@@ -24,45 +24,44 @@ export function MitreIntelligenceSummary() {
 
   return (
     <Card className="border-4 border-black shadow-[4px_4px_0px_#000] font-mono flex flex-col justify-between">
-      <CardHeader className="bg-orange-300 border-b-3 border-black p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0">
-        <div className="flex items-center gap-2 min-w-0">
-          <Crosshair className="w-5 h-5 text-black shrink-0" />
-          <div className="min-w-0">
-            <CardTitle className="text-sm font-black uppercase text-black truncate">
+      <CardHeader className="bg-orange-300 border-b-3 border-black p-3.5 space-y-2 min-w-0">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <Crosshair className="w-5 h-5 text-black shrink-0" />
+            <CardTitle className="text-xs sm:text-sm font-black uppercase text-black leading-tight break-words">
               MITRE ATT&CK INTELLIGENCE
             </CardTitle>
-            <p className="text-[10px] font-bold text-zinc-800 truncate">
-              Enterprise matrix mapping & automated TTP evidence correlation
-            </p>
           </div>
+          <Link href={`/mitre?id=${currentInvId}`} className="shrink-0">
+            <Badge variant="dark" className="hover:bg-zinc-800 cursor-pointer text-[9px] px-1.5 py-0.5">
+              27 TTPs →
+            </Badge>
+          </Link>
         </div>
-
-        <Link href={`/mitre?id=${currentInvId}`} className="shrink-0">
-          <Badge variant="dark" className="hover:bg-zinc-800 cursor-pointer text-[10px]">
-            27 TECHNIQUES →
-          </Badge>
-        </Link>
+        <p className="text-[10px] font-bold text-zinc-800 leading-tight">
+          Enterprise matrix mapping & automated TTP evidence correlation
+        </p>
       </CardHeader>
 
       <CardContent className="p-4 space-y-4 text-xs">
         {/* Metric Summary */}
-        <div className="grid grid-cols-3 gap-2 text-center">
-          <div className="p-2 border-2 border-black bg-zinc-50 space-y-0.5">
-            <span className="text-[9px] text-zinc-600 font-bold block uppercase">TACTICS</span>
+        <div className="grid grid-cols-3 gap-1.5 text-center">
+          <div className="p-2 border-2 border-black bg-zinc-50 space-y-0.5 min-w-0">
+            <span className="text-[8px] sm:text-[9px] text-zinc-600 font-bold block uppercase truncate">TACTICS</span>
             <span className="text-base font-black text-black">8</span>
-            <span className="text-[9px] text-zinc-500 block">Enterprise</span>
+            <span className="text-[8px] sm:text-[9px] text-zinc-500 block truncate">Enterprise</span>
           </div>
 
-          <div className="p-2 border-2 border-black bg-zinc-50 space-y-0.5">
-            <span className="text-[9px] text-zinc-600 font-bold block uppercase">CONFIDENCE</span>
+          <div className="p-2 border-2 border-black bg-zinc-50 space-y-0.5 min-w-0">
+            <span className="text-[8px] sm:text-[9px] text-zinc-600 font-bold block uppercase truncate">CONFIDENCE</span>
             <span className="text-base font-black text-emerald-700">96%</span>
-            <span className="text-[9px] text-zinc-500 block">High Quorum</span>
+            <span className="text-[8px] sm:text-[9px] text-zinc-500 block truncate">High Quorum</span>
           </div>
 
-          <div className="p-2 border-2 border-black bg-zinc-50 space-y-0.5">
-            <span className="text-[9px] text-zinc-600 font-bold block uppercase">COVERAGE</span>
+          <div className="p-2 border-2 border-black bg-zinc-50 space-y-0.5 min-w-0">
+            <span className="text-[8px] sm:text-[9px] text-zinc-600 font-bold block uppercase truncate">COVERAGE</span>
             <span className="text-base font-black text-amber-700">74%</span>
-            <span className="text-[9px] text-zinc-500 block">Attack Path</span>
+            <span className="text-[8px] sm:text-[9px] text-zinc-500 block truncate">Attack Path</span>
           </div>
         </div>
 
@@ -125,11 +124,11 @@ export function MitreIntelligenceSummary() {
         {/* Action Link */}
         <Link
           href={`/mitre?id=${currentInvId}`}
-          className="p-2 text-center border-2 border-black bg-white hover:bg-orange-300 font-mono text-xs font-black shadow-[2px_2px_0px_#000] flex items-center justify-center gap-1.5 transition-colors"
+          className="p-2 text-center border-2 border-black bg-white hover:bg-orange-300 font-mono text-xs font-black shadow-[2px_2px_0px_#000] flex items-center justify-center gap-1.5 transition-colors leading-tight"
         >
-          <Target className="w-3.5 h-3.5" />
-          <span>EXPLORE MITRE ATT&CK MATRIX</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <Target className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">EXPLORE MITRE ATT&CK MATRIX</span>
+          <ArrowRight className="w-3.5 h-3.5 shrink-0" />
         </Link>
       </CardContent>
     </Card>

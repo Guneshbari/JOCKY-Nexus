@@ -17,51 +17,50 @@ export function EndpointFleetAnalytics() {
 
   return (
     <Card className="border-4 border-black shadow-[4px_4px_0px_#000] font-mono flex flex-col justify-between">
-      <CardHeader className="bg-emerald-300 border-b-3 border-black p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0">
-        <div className="flex items-center gap-2 min-w-0">
-          <Server className="w-5 h-5 text-black shrink-0" />
-          <div className="min-w-0">
-            <CardTitle className="text-sm font-black uppercase text-black truncate">
+      <CardHeader className="bg-emerald-300 border-b-3 border-black p-3.5 space-y-2 min-w-0">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <Server className="w-5 h-5 text-black shrink-0" />
+            <CardTitle className="text-xs sm:text-sm font-black uppercase text-black leading-tight break-words">
               ENDPOINT FLEET POSTURE
             </CardTitle>
-            <p className="text-[10px] font-bold text-zinc-800 truncate">
-              Cross-platform agent health & telemetry
-            </p>
           </div>
+          <Link href="/endpoints" className="shrink-0">
+            <Badge variant="dark" className="hover:bg-zinc-800 cursor-pointer text-[9px] px-1.5 py-0.5">
+              {total} HOSTS →
+            </Badge>
+          </Link>
         </div>
-
-        <Link href="/endpoints" className="shrink-0">
-          <Badge variant="dark" className="hover:bg-zinc-800 cursor-pointer text-[10px]">
-            {total} ENDPOINTS →
-          </Badge>
-        </Link>
+        <p className="text-[10px] font-bold text-zinc-800 leading-tight">
+          Cross-platform agent health & telemetry
+        </p>
       </CardHeader>
 
       <CardContent className="p-4 space-y-4 text-xs">
-        {/* Fleet KPI Summary */}
-        <div className="grid grid-cols-4 gap-2 text-center">
+        {/* Fleet KPI Summary (2x2 grid prevents cramped overflow in narrow column layouts) */}
+        <div className="grid grid-cols-2 gap-2 text-center">
           <div className="p-2 border-2 border-black bg-zinc-50 space-y-0.5">
-            <span className="text-[9px] text-zinc-600 font-bold block uppercase">FLEET TOTAL</span>
+            <span className="text-[9px] text-zinc-600 font-bold block uppercase truncate">FLEET TOTAL</span>
             <span className="text-base font-black text-black">{total}</span>
-            <span className="text-[9px] text-zinc-500 block">5 Nodes</span>
+            <span className="text-[9px] text-zinc-500 block font-semibold truncate">5 Nodes</span>
           </div>
 
           <div className="p-2 border-2 border-black bg-emerald-50 space-y-0.5">
-            <span className="text-[9px] text-zinc-600 font-bold block uppercase">ONLINE</span>
+            <span className="text-[9px] text-zinc-600 font-bold block uppercase truncate">ONLINE</span>
             <span className="text-base font-black text-emerald-700">{online}</span>
-            <span className="text-[9px] text-emerald-800 block">1 Busy</span>
+            <span className="text-[9px] text-emerald-800 block font-semibold truncate">1 Busy</span>
           </div>
 
           <div className="p-2 border-2 border-black bg-rose-50 space-y-0.5">
-            <span className="text-[9px] text-zinc-600 font-bold block uppercase">ISOLATED</span>
+            <span className="text-[9px] text-zinc-600 font-bold block uppercase truncate">ISOLATED</span>
             <span className="text-base font-black text-rose-700">{isolated}</span>
-            <span className="text-[9px] text-rose-800 block">Quarantined</span>
+            <span className="text-[9px] text-rose-800 block font-semibold truncate">Quarantined</span>
           </div>
 
           <div className="p-2 border-2 border-black bg-cyan-50 space-y-0.5">
-            <span className="text-[9px] text-zinc-600 font-bold block uppercase">READINESS</span>
+            <span className="text-[9px] text-zinc-600 font-bold block uppercase truncate">READINESS</span>
             <span className="text-base font-black text-cyan-700">{avgReadiness}%</span>
-            <span className="text-[9px] text-zinc-600 block">Forensic</span>
+            <span className="text-[9px] text-zinc-600 block font-semibold truncate">Forensic</span>
           </div>
         </div>
 
