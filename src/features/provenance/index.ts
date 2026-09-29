@@ -1,6 +1,9 @@
 // JOCKY Nexus - Provenance Feature Module
+
+export { ProvenanceAuditWorkspace } from "./ProvenanceAuditWorkspace"
+
 export const PROVENANCE_FEATURE_META = {
   name: "provenance",
-  status: "INITIALIZED",
-  phase: "PHASE_1_FOUNDATION",
+  status: "ACTIVE",
+  phase: "PHASE_5_PROVENANCE_AUDIT",
 } as const
