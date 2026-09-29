@@ -21,15 +21,47 @@ import {
   EvidenceWorkflowStage,
   CollectionSimulationState,
 } from "@/types/evidence"
+import {
+  NetworkConnection,
+  NetworkFinding,
+  NetworkFilterState,
+} from "@/types/network"
+import {
+  MitreTechnique,
+  MitreCorrelation,
+  MitreFilterState,
+} from "@/types/mitre"
 import { MOCK_INVESTIGATIONS } from "@/data/investigations"
 import { MOCK_ENDPOINTS } from "@/data/endpoints"
 import { MOCK_EVIDENCE } from "@/data/evidence"
+import {
+  MOCK_NETWORK_CONNECTIONS,
+  MOCK_NETWORK_FINDINGS,
+} from "@/data/network"
+import {
+  MOCK_MITRE_CORRELATIONS,
+} from "@/data/mitre"
 import {
   generateJockySpecification,
   generateJockyIR,
 } from "@/lib/jockyGenerator"
 import { deriveAllProfilesForInvestigation } from "@/lib/adaptivePlanner"
 import { generateSimulatedEvidenceForInvestigation } from "@/lib/evidenceGenerator"
+
+export const DEFAULT_NETWORK_FILTERS: NetworkFilterState = {
+  search: "",
+  protocol: "ALL",
+  endpoint: "ALL",
+  riskLevel: "ALL",
+  investigationId: "ALL",
+}
+
+export const DEFAULT_MITRE_FILTERS: MitreFilterState = {
+  search: "",
+  tactic: "ALL",
+  confidence: "ALL",
+  investigationId: "ALL",
+}
 
 export const DEFAULT_CONSTRAINTS: InvestigationConstraints = {
   volatileEvidencePriority: true,
@@ -155,6 +187,24 @@ interface InvestigationState {
   setEvidenceFilter: (filters: Partial<EvidenceFilterState>) => void
   resetEvidenceFilters: () => void
   completeEvidenceCollection: () => void
+
+  // Phase 6: Network Forensics & MITRE Intelligence State
+  networkConnections: NetworkConnection[]
+  networkFindings: NetworkFinding[]
+  networkFilters: NetworkFilterState
+  activeNetworkFinding: NetworkFinding | null
+  mitreCorrelations: MitreCorrelation[]
+  mitreFilters: MitreFilterState
+  activeTechnique: MitreTechnique | null
+
+  // Phase 6 Actions
+  loadNetworkSimulation: (investigationId?: string) => void
+  selectNetworkFinding: (finding: NetworkFinding | null) => void
+  setNetworkFilter: (filters: Partial<NetworkFilterState>) => void
+  clearNetworkFilters: () => void
+  selectMitreTechnique: (technique: MitreTechnique | null) => void
+  setMitreFilter: (filters: Partial<MitreFilterState>) => void
+  clearMitreFilters: () => void
 }
 
 export const useInvestigationStore = create<InvestigationState>((set, get) => ({
@@ -230,6 +280,15 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
     lastSealedTimestamp: new Date().toISOString(),
   },
 
+  // Phase 6: Network Forensics & MITRE Intelligence initial state
+  networkConnections: MOCK_NETWORK_CONNECTIONS,
+  networkFindings: MOCK_NETWORK_FINDINGS,
+  networkFilters: DEFAULT_NETWORK_FILTERS,
+  activeNetworkFinding: MOCK_NETWORK_FINDINGS[0] ?? null,
+  mitreCorrelations: MOCK_MITRE_CORRELATIONS,
+  mitreFilters: DEFAULT_MITRE_FILTERS,
+  activeTechnique: null,
+
   selectInvestigation: (id) => {
     const inv = id ? get().investigations.find((i) => i.id === id) ?? null : null
     set({
@@ -256,6 +315,14 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
         provenanceState: {
           ...get().provenanceState,
           merkleRoot: inv.provenanceRootHash,
+        },
+        networkFilters: {
+          ...get().networkFilters,
+          investigationId: inv.id,
+        },
+        mitreFilters: {
+          ...get().mitreFilters,
+          investigationId: inv.id,
         },
       })
     }
@@ -841,5 +908,58 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
           : item
       ),
     }))
+  },
+
+  // Phase 6: Network Forensics & MITRE Intelligence Actions
+  loadNetworkSimulation: (investigationId) => {
+    const targetId = investigationId ?? get().currentInvestigation?.id ?? "inv-2026-001"
+    const filteredFindings = MOCK_NETWORK_FINDINGS.filter(
+      (f) => f.investigationId === targetId || targetId === "ALL"
+    )
+
+    set((state) => ({
+      networkFilters: { ...state.networkFilters, investigationId: targetId },
+      mitreFilters: { ...state.mitreFilters, investigationId: targetId },
+      activeNetworkFinding: filteredFindings[0] ?? null,
+      activeTechnique: null,
+    }))
+  },
+
+  selectNetworkFinding: (finding) => {
+    set({ activeNetworkFinding: finding })
+  },
+
+  setNetworkFilter: (filters) => {
+    set((state) => ({
+      networkFilters: {
+        ...state.networkFilters,
+        ...filters,
+      },
+    }))
+  },
+
+  clearNetworkFilters: () => {
+    set({
+      networkFilters: DEFAULT_NETWORK_FILTERS,
+    })
+  },
+
+  selectMitreTechnique: (technique) => {
+    set({ activeTechnique: technique })
+  },
+
+  setMitreFilter: (filters) => {
+    set((state) => ({
+      mitreFilters: {
+        ...state.mitreFilters,
+        ...filters,
+      },
+    }))
+  },
+
+  clearMitreFilters: () => {
+    set({
+      mitreFilters: DEFAULT_MITRE_FILTERS,
+    })
   },
 }))
