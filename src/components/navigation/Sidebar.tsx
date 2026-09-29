@@ -76,12 +76,24 @@ export function Sidebar() {
   const { isSidebarOpen, toggleSidebar } = useUIStore()
 
   return (
-    <aside
-      className={cn(
-        "relative flex flex-col border-r-4 border-black bg-zinc-100 transition-all duration-200 select-none z-30 shrink-0",
-        isSidebarOpen ? "w-64" : "w-20"
+    <>
+      {/* Mobile Backdrop when Sidebar is Open */}
+      {isSidebarOpen && (
+        <div
+          role="button"
+          tabIndex={-1}
+          aria-label="Close sidebar backdrop"
+          onClick={toggleSidebar}
+          className="fixed inset-0 bg-black/50 backdrop-blur-xs z-25 md:hidden"
+        />
       )}
-    >
+
+      <aside
+        className={cn(
+          "relative flex flex-col border-r-4 border-black bg-zinc-100 transition-all duration-200 select-none z-30 shrink-0",
+          isSidebarOpen ? "w-64" : "w-0 md:w-20 overflow-hidden md:overflow-visible border-r-0 md:border-r-4"
+        )}
+      >
       {/* Branding Header */}
       <div className="flex items-center justify-between p-4 border-b-4 border-black bg-amber-400">
         <Link href="/dashboard" className="flex items-center gap-3 overflow-hidden">
@@ -174,5 +186,6 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   )
 }
