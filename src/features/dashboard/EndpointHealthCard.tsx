@@ -20,12 +20,14 @@ export function EndpointHealthCard() {
 
   return (
     <Card className="border-4 border-black shadow-[4px_4px_0px_#000] flex flex-col justify-between">
-      <CardHeader className="bg-emerald-300 flex flex-row items-center justify-between pb-3">
-        <div className="flex items-center gap-2">
-          <Server className="w-5 h-5 text-black" />
-          <CardTitle className="text-sm">ENDPOINT FLEET HEALTH</CardTitle>
+      <CardHeader className="bg-emerald-300 flex flex-col sm:flex-row sm:items-center justify-between pb-3 gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <Server className="w-5 h-5 text-black shrink-0" />
+          <CardTitle className="text-sm font-black uppercase text-black leading-tight break-words">
+            ENDPOINT FLEET HEALTH
+          </CardTitle>
         </div>
-        <Link href="/endpoints">
+        <Link href="/endpoints" className="shrink-0">
           <Badge variant="dark" className="hover:bg-zinc-800 cursor-pointer">
             12 HOSTS →
           </Badge>

@@ -21,10 +21,12 @@ export function MitreCoverageCard() {
 
   return (
     <Card className="border-4 border-black shadow-[4px_4px_0px_#000] flex flex-col justify-between">
-      <CardHeader className="bg-orange-300 flex flex-row items-center justify-between pb-3">
-        <div className="flex items-center gap-2">
-          <Crosshair className="w-5 h-5 text-black" />
-          <CardTitle className="text-sm">MITRE ATT&CK ALIGNMENT</CardTitle>
+      <CardHeader className="bg-orange-300 flex flex-col sm:flex-row sm:items-center justify-between pb-3 gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <Crosshair className="w-5 h-5 text-black shrink-0" />
+          <CardTitle className="text-sm font-black uppercase text-black leading-tight break-words">
+            MITRE ATT&CK ALIGNMENT
+          </CardTitle>
         </div>
         <Link href="/mitre">
           <Badge variant="dark" className="hover:bg-zinc-800 cursor-pointer">
