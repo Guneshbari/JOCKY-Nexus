@@ -1,4 +1,16 @@
-import { Investigation } from "@/types/investigation"
+import { Investigation, InvestigationConstraints } from "@/types/investigation"
+import { generateJockySpecification, generateJockyIR } from "@/lib/jockyGenerator"
+
+const baseConstraints: InvestigationConstraints = {
+  volatileEvidencePriority: true,
+  minimalEndpointImpact: true,
+  evidenceIntegrityRequired: true,
+  networkCollectionEnabled: true,
+  memoryAnalysisRequired: true,
+  restrictedEndpointHandling: "ALLOW_AGENT_TUNNEL",
+  maxInvestigationDuration: "30m",
+  collectionPriority: "BALANCED",
+}
 
 export const MOCK_INVESTIGATIONS: Investigation[] = [
   {
@@ -16,6 +28,48 @@ export const MOCK_INVESTIGATIONS: Investigation[] = [
     evidenceCount: 7,
     caseName: "CASE-2026-LAT-01",
     adaptiveProfile: "PROFILE-A (VOLATILE TRIAGE)",
+    category: "CREDENTIAL ACCESS",
+    evidenceRequirements: [
+      "Process activity",
+      "Network connections",
+      "Authentication events",
+      "Memory indicators",
+    ],
+    constraints: baseConstraints,
+    jockySpec: generateJockySpecification({
+      name: "Cobalt Strike Beacon Lateral Staging via Kerberoasting",
+      caseName: "CASE-2026-LAT-01",
+      intent: "Investigate suspicious service ticket extraction on DC-PROD-PRIMARY followed by encoded PowerShell execution on FIN-WS-44.",
+      description: "Multi-stage intrusion scenario targeting Active Directory credentials and financial workstation staging.",
+      priority: "CRITICAL",
+      category: "CREDENTIAL ACCESS",
+      evidenceRequirements: [
+        "Process activity",
+        "Network connections",
+        "Authentication events",
+        "Memory indicators",
+      ],
+      targetEndpoints: ["ep-dc-01", "ep-ws-44", "ep-sec-proxy"],
+      constraints: baseConstraints,
+      adaptiveProfile: "PROFILE-A (VOLATILE TRIAGE)",
+    }),
+    jockyIR: generateJockyIR({
+      name: "Cobalt Strike Beacon Lateral Staging via Kerberoasting",
+      caseName: "CASE-2026-LAT-01",
+      intent: "Investigate suspicious service ticket extraction on DC-PROD-PRIMARY followed by encoded PowerShell execution on FIN-WS-44.",
+      description: "Multi-stage intrusion scenario targeting Active Directory credentials and financial workstation staging.",
+      priority: "CRITICAL",
+      category: "CREDENTIAL ACCESS",
+      evidenceRequirements: [
+        "Process activity",
+        "Network connections",
+        "Authentication events",
+        "Memory indicators",
+      ],
+      targetEndpoints: ["ep-dc-01", "ep-ws-44", "ep-sec-proxy"],
+      constraints: baseConstraints,
+      adaptiveProfile: "PROFILE-A (VOLATILE TRIAGE)",
+    }),
     provenanceRootHash: "7b4c9e12089ef0398bb129fae0892019ab928479e01894ba74812b192837bc91",
     steps: [
       {
@@ -97,6 +151,48 @@ export const MOCK_INVESTIGATIONS: Investigation[] = [
     evidenceCount: 3,
     caseName: "CASE-2026-RANSOM-02",
     adaptiveProfile: "PROFILE-B (CONTAINMENT & MFT)",
+    category: "RANSOMWARE ANALYSIS",
+    evidenceRequirements: [
+      "Process activity",
+      "File metadata",
+      "Persistence artifacts",
+      "Memory indicators",
+    ],
+    constraints: baseConstraints,
+    jockySpec: generateJockySpecification({
+      name: "ShadowCopy Deletion and Ransomware Pre-Encryption Canary",
+      caseName: "CASE-2026-RANSOM-02",
+      intent: "Determine if vssadmin.exe execution on FIN-WS-44 was precursor to mass file ciphering.",
+      description: "Automated alert triggered by sentinel agent detecting volume shadow copy deletion command.",
+      priority: "HIGH",
+      category: "RANSOMWARE ANALYSIS",
+      evidenceRequirements: [
+        "Process activity",
+        "File metadata",
+        "Persistence artifacts",
+        "Memory indicators",
+      ],
+      targetEndpoints: ["ep-ws-44"],
+      constraints: baseConstraints,
+      adaptiveProfile: "PROFILE-B (CONTAINMENT & MFT)",
+    }),
+    jockyIR: generateJockyIR({
+      name: "ShadowCopy Deletion and Ransomware Pre-Encryption Canary",
+      caseName: "CASE-2026-RANSOM-02",
+      intent: "Determine if vssadmin.exe execution on FIN-WS-44 was precursor to mass file ciphering.",
+      description: "Automated alert triggered by sentinel agent detecting volume shadow copy deletion command.",
+      priority: "HIGH",
+      category: "RANSOMWARE ANALYSIS",
+      evidenceRequirements: [
+        "Process activity",
+        "File metadata",
+        "Persistence artifacts",
+        "Memory indicators",
+      ],
+      targetEndpoints: ["ep-ws-44"],
+      constraints: baseConstraints,
+      adaptiveProfile: "PROFILE-B (CONTAINMENT & MFT)",
+    }),
     provenanceRootHash: "e10adc3949ba59abbe56e057f20f883e7b8a8b1932145892cfa71295e87123aa",
     steps: [
       {
@@ -148,6 +244,48 @@ export const MOCK_INVESTIGATIONS: Investigation[] = [
     evidenceCount: 5,
     caseName: "CASE-2026-KERNEL-03",
     adaptiveProfile: "PROFILE-C (eBPF ROOTKIT AUDIT)",
+    category: "ROOTKIT / KERNEL AUDIT",
+    evidenceRequirements: [
+      "Kernel / driver inventory",
+      "Container activity",
+      "System logs",
+      "Process activity",
+    ],
+    constraints: baseConstraints,
+    jockySpec: generateJockySpecification({
+      name: "Container Breakout & eBPF Hook Manipulation",
+      caseName: "CASE-2026-KERNEL-03",
+      intent: "Trace privileged container namespace escape on CORE-APP-NODE-09 into host kernel space.",
+      description: "Kernel audit log triggered unexpected sys_bpf probe loading by non-root containerized pod.",
+      priority: "CRITICAL",
+      category: "ROOTKIT / KERNEL AUDIT",
+      evidenceRequirements: [
+        "Kernel / driver inventory",
+        "Container activity",
+        "System logs",
+        "Process activity",
+      ],
+      targetEndpoints: ["ep-app-09"],
+      constraints: baseConstraints,
+      adaptiveProfile: "PROFILE-C (eBPF ROOTKIT AUDIT)",
+    }),
+    jockyIR: generateJockyIR({
+      name: "Container Breakout & eBPF Hook Manipulation",
+      caseName: "CASE-2026-KERNEL-03",
+      intent: "Trace privileged container namespace escape on CORE-APP-NODE-09 into host kernel space.",
+      description: "Kernel audit log triggered unexpected sys_bpf probe loading by non-root containerized pod.",
+      priority: "CRITICAL",
+      category: "ROOTKIT / KERNEL AUDIT",
+      evidenceRequirements: [
+        "Kernel / driver inventory",
+        "Container activity",
+        "System logs",
+        "Process activity",
+      ],
+      targetEndpoints: ["ep-app-09"],
+      constraints: baseConstraints,
+      adaptiveProfile: "PROFILE-C (eBPF ROOTKIT AUDIT)",
+    }),
     provenanceRootHash: "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     steps: [
       {
