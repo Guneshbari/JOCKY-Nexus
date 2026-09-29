@@ -1,73 +1,132 @@
-import React from "react"
-import Link from "next/link"
-import { RoutePlaceholder } from "@/components/layout/RoutePlaceholder"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { MOCK_INVESTIGATIONS } from "@/data/investigations"
-import { formatDate } from "@/lib/formatters"
-import { ArrowUpRight } from "lucide-react"
+"use client"
+
+import React, { useState } from "react"
+import {
+  Layers,
+  Wand2,
+  Activity,
+  Server,
+  Sparkles,
+} from "lucide-react"
+import { InvestigationList } from "@/features/investigations/InvestigationList"
+import { InvestigationBuilder } from "@/features/investigations/InvestigationBuilder"
+import { useInvestigationStore } from "@/store/investigationStore"
+import { useEndpointStore } from "@/store/endpointStore"
+import { StatusPill } from "@/components/status/StatusPill"
 
 export default function InvestigationsPage() {
+  const [activeTab, setActiveTab] = useState<"campaigns" | "builder">("campaigns")
+
+  const investigations = useInvestigationStore((state) => state.investigations)
+  const endpoints = useEndpointStore((state) => state.endpoints)
+
+  const inProgressCount = investigations.filter((i) => i.status === "IN_PROGRESS").length
+  const readyCount = investigations.filter((i) => i.status === "READY").length
+
   return (
-    <div className="space-y-6">
-      <RoutePlaceholder
-        title="Forensic Investigations Campaigns"
-        route="/investigations"
-        architectureRole="Page-level composition for managing and launching multi-endpoint forensic investigations driven by natural intent and adaptive execution rules."
-        description="Coordinates live forensic campaigns across Windows, Linux, and macOS hosts with verifiable chain-of-custody tracking."
-        connectedTypes={["investigation.ts", "endpoint.ts", "execution.ts"]}
-        connectedData={["investigations.ts", "endpoints.ts", "execution.ts"]}
-        badge="CAMPAIGNS"
-      />
+    <div className="space-y-6 font-mono">
+      {/* Top Banner / Breadcrumb */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-xs font-black bg-black text-amber-300 px-2 py-0.5 border border-black">
+            NEXUS ENGINE // V2.4
+          </span>
+          <span className="text-xs font-bold text-zinc-600">
+            Forensic Intent → JOCKY IR → Adaptive Execution
+          </span>
+        </div>
 
-      {/* Campaign List Preview */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-black uppercase tracking-wider text-black">
-          Active Forensic Campaigns ({MOCK_INVESTIGATIONS.length})
-        </h2>
-
-        <div className="grid grid-cols-1 gap-4">
-          {MOCK_INVESTIGATIONS.map((inv) => (
-            <Card key={inv.id} className="border-3 border-black shadow-[4px_4px_0px_#000]">
-              <CardHeader className="bg-amber-100 flex flex-col md:flex-row md:items-center justify-between gap-2">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <Badge variant={inv.severity === "CRITICAL" ? "danger" : "warning"}>
-                      {inv.severity}
-                    </Badge>
-                    <span className="font-mono text-xs font-black bg-black text-white px-2 py-0.5">
-                      {inv.id}
-                    </span>
-                    <Badge variant={inv.status === "COMPLETED" ? "success" : "default"}>
-                      {inv.status}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-lg">{inv.title}</CardTitle>
-                </div>
-
-                <Link href={`/investigations/${inv.id}`}>
-                  <Button variant="default" size="sm" className="gap-1">
-                    Details & Audit <ArrowUpRight className="w-3.5 h-3.5" />
-                  </Button>
-                </Link>
-              </CardHeader>
-
-              <CardContent className="pt-4 space-y-3">
-                <p className="text-xs font-bold text-zinc-800">
-                  <span className="text-zinc-500 font-mono">INTENT:</span> {inv.intent}
-                </p>
-
-                <div className="flex flex-wrap items-center gap-4 text-xs font-mono font-bold text-zinc-600">
-                  <span>Target Hosts: {inv.targetEndpointIds.length}</span>
-                  <span>Artifacts: {inv.evidenceCount}</span>
-                  <span>Initiated: {formatDate(inv.createdAt)}</span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="flex items-center gap-2">
+          <StatusPill label="ADAPTIVE PLANNER ACTIVE" status="verified" />
         </div>
       </div>
+
+      {/* Main Page Title Header */}
+      <div className="border-4 border-black bg-white p-5 shadow-[6px_6px_0px_#000] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-2xl md:text-3xl font-black uppercase text-black tracking-tight">
+            FORENSIC INVESTIGATIONS CONSOLE
+          </h1>
+          <p className="text-xs font-bold text-zinc-600 max-w-2xl">
+            Coordinate multi-endpoint forensic investigations across Windows, Linux, and macOS. Define natural intent, compile to platform-independent JOCKY IR, and maintain verifiable hash chains.
+          </p>
+        </div>
+
+        {/* Tab Toggle Switcher */}
+        <div className="flex items-center gap-2 bg-zinc-100 p-1.5 border-3 border-black shadow-[3px_3px_0px_#000] shrink-0">
+          <button
+            type="button"
+            onClick={() => setActiveTab("campaigns")}
+            className={`flex items-center gap-2 px-3 py-1.5 font-black text-xs uppercase border-2 border-black transition-all cursor-pointer ${
+              activeTab === "campaigns"
+                ? "bg-black text-amber-300 shadow-[2px_2px_0px_#000]"
+                : "bg-white text-black hover:bg-zinc-200"
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>CAMPAIGNS ({investigations.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("builder")}
+            className={`flex items-center gap-2 px-3 py-1.5 font-black text-xs uppercase border-2 border-black transition-all cursor-pointer ${
+              activeTab === "builder"
+                ? "bg-amber-400 text-black shadow-[2px_2px_0px_#000]"
+                : "bg-white text-black hover:bg-zinc-200"
+            }`}
+          >
+            <Wand2 className="w-3.5 h-3.5" />
+            <span>INVESTIGATION BUILDER</span>
+          </button>
+        </div>
+      </div>
+
+      {/* KPI Stats Strip */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-3 border-3 border-black bg-white shadow-[3px_3px_0px_#000] flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-black uppercase text-zinc-500 block">TOTAL CAMPAIGNS</span>
+            <span className="text-xl font-black text-black">{investigations.length}</span>
+          </div>
+          <Layers className="w-5 h-5 text-zinc-500" />
+        </div>
+
+        <div className="p-3 border-3 border-black bg-white shadow-[3px_3px_0px_#000] flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-black uppercase text-zinc-500 block">ACTIVE RUNNING</span>
+            <span className="text-xl font-black text-amber-600">{inProgressCount}</span>
+          </div>
+          <Activity className="w-5 h-5 text-amber-500" />
+        </div>
+
+        <div className="p-3 border-3 border-black bg-white shadow-[3px_3px_0px_#000] flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-black uppercase text-zinc-500 block">READY TO LAUNCH</span>
+            <span className="text-xl font-black text-blue-600">{readyCount}</span>
+          </div>
+          <Sparkles className="w-5 h-5 text-blue-500" />
+        </div>
+
+        <div className="p-3 border-3 border-black bg-white shadow-[3px_3px_0px_#000] flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-black uppercase text-zinc-500 block">MONITORED HOSTS</span>
+            <span className="text-xl font-black text-emerald-600">{endpoints.length}</span>
+          </div>
+          <Server className="w-5 h-5 text-emerald-500" />
+        </div>
+      </div>
+
+      {/* Main Workspace Render */}
+      {activeTab === "campaigns" ? (
+        <InvestigationList onOpenBuilder={() => setActiveTab("builder")} />
+      ) : (
+        <InvestigationBuilder
+          onInvestigationCreated={() => {
+            // Once generated, stay in builder or switch if needed
+          }}
+        />
+      )}
     </div>
   )
 }
