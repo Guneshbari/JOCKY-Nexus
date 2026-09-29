@@ -24,20 +24,20 @@ export function MitreIntelligenceSummary() {
 
   return (
     <Card className="border-4 border-black shadow-[4px_4px_0px_#000] font-mono flex flex-col justify-between">
-      <CardHeader className="bg-orange-300 border-b-3 border-black p-3.5 flex flex-row items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Crosshair className="w-5 h-5 text-black" />
-          <div>
-            <CardTitle className="text-sm font-black uppercase text-black">
+      <CardHeader className="bg-orange-300 border-b-3 border-black p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <Crosshair className="w-5 h-5 text-black shrink-0" />
+          <div className="min-w-0">
+            <CardTitle className="text-sm font-black uppercase text-black truncate">
               MITRE ATT&CK INTELLIGENCE
             </CardTitle>
-            <p className="text-[10px] font-bold text-zinc-800">
+            <p className="text-[10px] font-bold text-zinc-800 truncate">
               Enterprise matrix mapping & automated TTP evidence correlation
             </p>
           </div>
         </div>
 
-        <Link href={`/mitre?id=${currentInvId}`}>
+        <Link href={`/mitre?id=${currentInvId}`} className="shrink-0">
           <Badge variant="dark" className="hover:bg-zinc-800 cursor-pointer text-[10px]">
             27 TECHNIQUES →
           </Badge>

@@ -45,7 +45,7 @@ export function CommandCenterHeader({
             />
           </div>
 
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-black flex items-center gap-3">
+          <h1 className="text-xl sm:text-3xl md:text-5xl font-black uppercase tracking-tight text-black flex items-center gap-3">
             <span>JOCKY NEXUS COMMAND</span>
           </h1>
 
@@ -55,20 +55,21 @@ export function CommandCenterHeader({
         </div>
 
         {/* Right Controls: Refresh, Simulation Mode, Judge Demo Mode */}
-        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 shrink-0">
           <DashboardRefreshButton />
 
           <button
             type="button"
             onClick={onToggleJudgeDemo}
-            className={`px-3 py-1.5 border-2 border-black text-xs font-black uppercase transition-all shadow-[2px_2px_0px_#000] cursor-pointer flex items-center gap-1.5 ${
+            className={`px-2.5 sm:px-3 py-1.5 border-2 border-black text-xs font-black uppercase transition-all shadow-[2px_2px_0px_#000] cursor-pointer flex items-center gap-1.5 ${
               isJudgeDemoActive
                 ? "bg-amber-400 text-black ring-2 ring-black"
                 : "bg-zinc-100 hover:bg-zinc-200 text-black"
             }`}
           >
-            <Compass className="w-3.5 h-3.5 text-black" />
-            <span>{isJudgeDemoActive ? "JUDGE DEMO: ACTIVE" : "JUDGE DEMO"}</span>
+            <Compass className="w-3.5 h-3.5 text-black shrink-0" />
+            <span className="hidden xs:inline">{isJudgeDemoActive ? "JUDGE DEMO: ACTIVE" : "JUDGE DEMO"}</span>
+            <span className="xs:hidden">{isJudgeDemoActive ? "DEMO ACTIVE" : "DEMO"}</span>
           </button>
 
           <Button
@@ -77,84 +78,85 @@ export function CommandCenterHeader({
             onClick={() => openModal("NEW_INVESTIGATION")}
             className="text-xs font-black uppercase shadow-[2px_2px_0px_#000]"
           >
-            <Plus className="w-3.5 h-3.5 mr-1" />
-            <span>NEW INVESTIGATION</span>
+            <Plus className="w-3.5 h-3.5 mr-1 shrink-0" />
+            <span className="hidden xs:inline">NEW INVESTIGATION</span>
+            <span className="xs:hidden">NEW CASE</span>
           </Button>
         </div>
       </div>
 
       {/* Secondary Status Strip: 5 Core Operational Subsystems */}
-      <div className="flex flex-wrap items-center gap-2 pt-2 border-t-2 border-black text-[11px] font-bold">
+      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-2 border-t-2 border-black text-[10px] sm:text-[11px] font-bold">
         <span className="text-zinc-500 uppercase">Operational Subsystems:</span>
         <div className="flex items-center gap-1 px-2 py-0.5 border border-black bg-emerald-50 text-emerald-900">
-          <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" />
           <span>ADAPTIVE ENGINE: ONLINE</span>
         </div>
         <div className="flex items-center gap-1 px-2 py-0.5 border border-black bg-blue-50 text-blue-900">
-          <span className="w-2 h-2 rounded-full bg-blue-600" />
+          <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
           <span>EVIDENCE PIPELINE: VERIFIED</span>
         </div>
         <div className="flex items-center gap-1 px-2 py-0.5 border border-black bg-lime-50 text-lime-900">
-          <span className="w-2 h-2 rounded-full bg-lime-600" />
+          <span className="w-2 h-2 rounded-full bg-lime-600 shrink-0" />
           <span>PROVENANCE: SEALED</span>
         </div>
         <div className="flex items-center gap-1 px-2 py-0.5 border border-black bg-purple-50 text-purple-900">
-          <span className="w-2 h-2 rounded-full bg-purple-600" />
+          <span className="w-2 h-2 rounded-full bg-purple-600 shrink-0" />
           <span>NETWORK INTELLIGENCE: ONLINE</span>
         </div>
         <div className="flex items-center gap-1 px-2 py-0.5 border border-black bg-orange-50 text-orange-900">
-          <span className="w-2 h-2 rounded-full bg-orange-600" />
+          <span className="w-2 h-2 rounded-full bg-orange-600 shrink-0" />
           <span>MITRE CORRELATION: READY</span>
         </div>
       </div>
 
       {/* Primary & Secondary Command Action Toolbar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-1 text-xs">
+      <div className="grid grid-cols-2 xs:grid-cols-4 lg:grid-cols-8 gap-1.5 sm:gap-2 pt-1 text-[11px] sm:text-xs">
         <Link
           href="/investigations"
-          className="p-2 border-2 border-black bg-zinc-100 hover:bg-amber-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
+          className="p-1.5 sm:p-2 border-2 border-black bg-zinc-100 hover:bg-amber-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
         >
           CAMPAIGNS
         </Link>
         <Link
           href={`/investigations/${currentInvId}`}
-          className="p-2 border-2 border-black bg-zinc-100 hover:bg-amber-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
+          className="p-1.5 sm:p-2 border-2 border-black bg-zinc-100 hover:bg-amber-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
         >
           ACTIVE CASE
         </Link>
         <Link
           href={`/live-investigation?id=${currentInvId}`}
-          className="p-2 border-2 border-black bg-zinc-100 hover:bg-amber-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
+          className="p-1.5 sm:p-2 border-2 border-black bg-zinc-100 hover:bg-amber-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
         >
           ADAPTIVE
         </Link>
         <Link
           href={`/evidence?id=${currentInvId}`}
-          className="p-2 border-2 border-black bg-zinc-100 hover:bg-cyan-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
+          className="p-1.5 sm:p-2 border-2 border-black bg-zinc-100 hover:bg-cyan-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
         >
           EVIDENCE
         </Link>
         <Link
           href={`/provenance`}
-          className="p-2 border-2 border-black bg-zinc-100 hover:bg-lime-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
+          className="p-1.5 sm:p-2 border-2 border-black bg-zinc-100 hover:bg-lime-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
         >
           PROVENANCE
         </Link>
         <Link
           href={`/network?id=${currentInvId}`}
-          className="p-2 border-2 border-black bg-zinc-100 hover:bg-purple-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
+          className="p-1.5 sm:p-2 border-2 border-black bg-zinc-100 hover:bg-purple-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
         >
           NETWORK
         </Link>
         <Link
           href={`/mitre?id=${currentInvId}`}
-          className="p-2 border-2 border-black bg-zinc-100 hover:bg-orange-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
+          className="p-1.5 sm:p-2 border-2 border-black bg-zinc-100 hover:bg-orange-300 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
         >
           MITRE ATT&CK
         </Link>
         <Link
           href="/endpoints"
-          className="p-2 border-2 border-black bg-zinc-100 hover:bg-zinc-200 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
+          className="p-1.5 sm:p-2 border-2 border-black bg-zinc-100 hover:bg-zinc-200 text-black font-black uppercase text-center truncate shadow-[2px_2px_0px_#000] transition-all"
         >
           ENDPOINTS
         </Link>

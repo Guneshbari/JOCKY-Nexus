@@ -13,20 +13,20 @@ export function NetworkIntelligenceSummary() {
 
   return (
     <Card className="border-4 border-black shadow-[4px_4px_0px_#000] font-mono flex flex-col justify-between">
-      <CardHeader className="bg-purple-300 border-b-3 border-black p-3.5 flex flex-row items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Network className="w-5 h-5 text-black" />
-          <div>
-            <CardTitle className="text-sm font-black uppercase text-black">
+      <CardHeader className="bg-purple-300 border-b-3 border-black p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <Network className="w-5 h-5 text-black shrink-0" />
+          <div className="min-w-0">
+            <CardTitle className="text-sm font-black uppercase text-black truncate">
               NETWORK FORENSICS & C2
             </CardTitle>
-            <p className="text-[10px] font-bold text-zinc-800">
+            <p className="text-[10px] font-bold text-zinc-800 truncate">
               Protocol distribution, beacon detection, and packet traces
             </p>
           </div>
         </div>
 
-        <Link href={`/network?id=${currentInvId}`}>
+        <Link href={`/network?id=${currentInvId}`} className="shrink-0">
           <Badge variant="dark" className="hover:bg-zinc-800 cursor-pointer text-[10px]">
             12 FLOWS ANALYZED →
           </Badge>

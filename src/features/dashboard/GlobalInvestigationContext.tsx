@@ -39,12 +39,12 @@ export function GlobalInvestigationContext() {
             Active Investigation Context:
           </span>
           {/* Case Switcher */}
-          <div className="relative inline-block">
+          <div className="relative inline-block max-w-[200px] xs:max-w-[260px] sm:max-w-xs">
             <select
               aria-label="Switch Active Case Context"
               value={currentInv.id}
               onChange={(e) => selectInvestigation(e.target.value)}
-              className="appearance-none bg-white hover:bg-zinc-100 border-2 border-black px-2.5 py-1 pr-7 text-xs font-black uppercase cursor-pointer shadow-[2px_2px_0px_#000] focus:outline-none"
+              className="appearance-none bg-white hover:bg-zinc-100 border-2 border-black px-2.5 py-1 pr-7 text-xs font-black uppercase cursor-pointer shadow-[2px_2px_0px_#000] focus:outline-none w-full truncate"
             >
               {investigations.map((inv) => (
                 <option key={inv.id} value={inv.id}>

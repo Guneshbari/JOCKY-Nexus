@@ -105,17 +105,17 @@ export function AdaptiveExecutionAnalytics() {
   return (
     <Card className="border-4 border-black shadow-[6px_6px_0px_#000] font-mono overflow-hidden">
       {/* Header */}
-      <CardHeader className="bg-cyan-300 border-b-4 border-black p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="p-1.5 bg-black text-cyan-300 border border-black shadow-[2px_2px_0px_#000]">
+      <CardHeader className="bg-cyan-300 border-b-4 border-black p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 min-w-0">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="p-1.5 bg-black text-cyan-300 border border-black shadow-[2px_2px_0px_#000] shrink-0">
             <Cpu className="w-5 h-5" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <CardTitle className="text-base font-black uppercase tracking-tight text-black">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <CardTitle className="text-sm sm:text-base font-black uppercase tracking-tight text-black">
                 ADAPTIVE EXECUTION INTELLIGENCE (CORE USP)
               </CardTitle>
-              <Badge variant="dark" className="text-[10px]">
+              <Badge variant="dark" className="text-[10px] shrink-0">
                 ZERO AGENT RECOMPILATION
               </Badge>
             </div>
@@ -125,7 +125,7 @@ export function AdaptiveExecutionAnalytics() {
           </div>
         </div>
 
-        <Link href={`/live-investigation?id=${currentInvId}`}>
+        <Link href={`/live-investigation?id=${currentInvId}`} className="shrink-0">
           <Button variant="default" size="sm" className="font-mono text-xs font-black uppercase shadow-[2px_2px_0px_#000]">
             <span>OPEN LIVE WORKFLOW</span>
             <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -133,25 +133,25 @@ export function AdaptiveExecutionAnalytics() {
         </Link>
       </CardHeader>
 
-      <CardContent className="p-4 sm:p-5 space-y-5">
+      <CardContent className="p-3 sm:p-5 space-y-4 sm:space-y-5 min-w-0">
         {/* Core USP Paradigm Banner */}
-        <div className="p-3 border-2 border-black bg-zinc-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-[3px_3px_0px_#000]">
-          <div className="flex items-center gap-2">
+        <div className="p-3 border-2 border-black bg-zinc-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-2.5 sm:gap-3 shadow-[3px_3px_0px_#000] min-w-0">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 min-w-0">
             <Zap className="w-4 h-4 text-amber-400 animate-pulse shrink-0" />
-            <span className="text-xs font-black tracking-wide uppercase text-amber-300">
+            <span className="text-xs font-black tracking-wide uppercase text-amber-300 shrink-0">
               CORE PARADIGM:
             </span>
-            <span className="text-xs font-bold text-zinc-200">
-              HUMAN FORENSIC INTENT → JOCKY IR → 4 ADAPTIVE PROFILES → UNIFIED EVIDENCE CHAIN
+            <span className="text-[11px] sm:text-xs font-bold text-zinc-200 break-words">
+              FORENSIC INTENT → JOCKY IR → 4 ADAPTIVE PROFILES → VERIFIABLE EVIDENCE CHAIN
             </span>
           </div>
 
-          <div className="flex items-center gap-3 text-[11px] shrink-0 font-bold">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] shrink-0 font-bold">
             <span className="text-emerald-400 flex items-center gap-1">
-              <Shield className="w-3.5 h-3.5" /> 100% Policy Compliant
+              <Shield className="w-3.5 h-3.5 shrink-0" /> 100% Policy Compliant
             </span>
             <span className="text-cyan-400 flex items-center gap-1">
-              <Activity className="w-3.5 h-3.5" /> Heuristic Synthesizer Active
+              <Activity className="w-3.5 h-3.5 shrink-0" /> Heuristic Synthesizer Active
             </span>
           </div>
         </div>
@@ -208,8 +208,8 @@ export function AdaptiveExecutionAnalytics() {
                       <YAxis
                         type="category"
                         dataKey="name"
-                        width={140}
-                        tick={{ fontSize: 10, fill: "#000", fontWeight: "bold" }}
+                        width={125}
+                        tick={{ fontSize: 9, fill: "#000", fontWeight: "bold" }}
                       />
                       <Tooltip
                         content={({ active, payload }) => {
@@ -287,7 +287,7 @@ export function AdaptiveExecutionAnalytics() {
           </div>
 
           {/* Right Column: Interactive Profile Inspector (5 cols) */}
-          <div className="lg:col-span-5 flex flex-col space-y-3">
+          <div className="lg:col-span-5 flex flex-col space-y-3 min-w-0">
             <div className="text-xs font-black uppercase text-black flex items-center gap-1.5">
               <Terminal className="w-4 h-4 text-black" />
               <span>INSPECT ADAPTIVE EXECUTION PROFILE</span>
@@ -302,7 +302,7 @@ export function AdaptiveExecutionAnalytics() {
                     key={id}
                     type="button"
                     onClick={() => setSelectedProfileId(id)}
-                    className={`py-1.5 px-1 text-center font-mono text-[11px] font-black border-2 border-black transition-all ${
+                    className={`py-1.5 px-0.5 sm:px-1 text-center font-mono text-[9px] sm:text-[11px] font-black border-2 border-black transition-all truncate ${
                       isSelected
                         ? `${PROFILES[id].accentColor} text-black shadow-[2px_2px_0px_#000] -translate-y-0.5`
                         : "bg-white text-zinc-700 hover:bg-zinc-100"

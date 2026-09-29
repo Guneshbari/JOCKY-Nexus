@@ -146,10 +146,10 @@ export function InvestigationOperationsTable() {
       </CardHeader>
 
       {/* Filter and Search Bar */}
-      <div className="p-3 bg-zinc-100 border-b-3 border-black flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[280px]">
+      <div className="p-3 bg-zinc-100 border-b-3 border-black flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 min-w-0">
+        <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0 w-full md:w-auto">
           {/* Search box */}
-          <div className="relative flex-1 min-w-[200px]">
+          <div className="relative flex-1 min-w-[180px] xs:min-w-[220px]">
             <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-500" />
             <input
               type="text"
@@ -162,25 +162,25 @@ export function InvestigationOperationsTable() {
           </div>
 
           {/* Status selector */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 shrink-0">
             {(["ALL", "IN_PROGRESS", "COMPLETED"] as const).map((st) => (
               <button
                 key={st}
                 type="button"
                 onClick={() => setStatusFilter(st)}
-                className={`px-2 py-1 text-[10px] font-black border-2 border-black transition-all ${
+                className={`px-1.5 sm:px-2 py-1 text-[10px] font-black border-2 border-black transition-all ${
                   statusFilter === st
                     ? "bg-black text-amber-300 shadow-[2px_2px_0px_#000]"
                     : "bg-white text-black hover:bg-zinc-200"
                 }`}
               >
-                {st}
+                {st === "IN_PROGRESS" ? "PROGRESS" : st}
               </button>
             ))}
           </div>
 
           {/* Severity selector */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 shrink-0">
             <span className="text-[10px] font-bold text-zinc-500 hidden sm:inline">SEV:</span>
             {(["ALL", "CRITICAL", "HIGH", "MEDIUM"] as const).map((sev) => (
               <button
@@ -199,7 +199,7 @@ export function InvestigationOperationsTable() {
           </div>
 
           {/* Profile filter */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 shrink-0">
             <span className="text-[10px] font-bold text-zinc-500 hidden md:inline">PROFILE:</span>
             {(["ALL", "PROFILE-A", "PROFILE-B", "PROFILE-C"] as const).map((prof) => (
               <button
@@ -212,7 +212,7 @@ export function InvestigationOperationsTable() {
                     : "bg-white text-black hover:bg-zinc-200"
                 }`}
               >
-                {prof}
+                {prof === "ALL" ? "ALL" : prof.replace("PROFILE-", "P-")}
               </button>
             ))}
           </div>
@@ -223,7 +223,7 @@ export function InvestigationOperationsTable() {
           <button
             type="button"
             onClick={resetFilters}
-            className="px-2 py-1 text-[10px] font-black border-2 border-black bg-zinc-200 hover:bg-zinc-300 text-black flex items-center gap-1 shadow-[1px_1px_0px_#000]"
+            className="px-2 py-1 text-[10px] font-black border-2 border-black bg-zinc-200 hover:bg-zinc-300 text-black flex items-center gap-1 shadow-[1px_1px_0px_#000] shrink-0"
           >
             <RotateCcw className="w-3 h-3" />
             <span>RESET</span>
@@ -232,8 +232,8 @@ export function InvestigationOperationsTable() {
       </div>
 
       {/* Table Content */}
-      <CardContent className="p-0 overflow-x-auto">
-        <table className="w-full text-left font-mono text-xs border-collapse">
+      <CardContent className="p-0 overflow-x-auto w-full min-w-0">
+        <table className="w-full min-w-[850px] text-left font-mono text-xs border-collapse">
           <thead>
             <tr className="border-b-3 border-black bg-zinc-200 font-black uppercase text-zinc-800">
               <th className="p-3">Investigation ID</th>
