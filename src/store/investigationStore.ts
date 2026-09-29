@@ -7,11 +7,20 @@ import {
   InvestigationConstraints,
   EvidenceRequirement,
 } from "@/types/investigation"
+import {
+  AdaptiveExecutionProfile,
+  AdaptiveDecision,
+  AdaptiveSimulationStage,
+  AdaptiveSimulationState,
+  EndpointPosture,
+} from "@/types/execution"
 import { MOCK_INVESTIGATIONS } from "@/data/investigations"
+import { MOCK_ENDPOINTS } from "@/data/endpoints"
 import {
   generateJockySpecification,
   generateJockyIR,
 } from "@/lib/jockyGenerator"
+import { deriveAllProfilesForInvestigation } from "@/lib/adaptivePlanner"
 
 export const DEFAULT_CONSTRAINTS: InvestigationConstraints = {
   volatileEvidencePriority: true,
@@ -42,11 +51,17 @@ export const DEFAULT_BUILDER_DRAFT: InvestigationBuilderDraft = {
   adaptiveProfile: "PROFILE-A (VOLATILE TRIAGE)",
 }
 
+// Initial profile derivation
+const initialInvestigation = MOCK_INVESTIGATIONS[0]
+const { profiles: initialProfiles, decisions: initialDecisions, postures: initialPostures } =
+  deriveAllProfilesForInvestigation(initialInvestigation, MOCK_ENDPOINTS)
+
 interface InvestigationState {
   // Collections & Active State
   investigations: Investigation[]
   selectedInvestigationId: string | null
   currentInvestigation: Investigation | null
+  activeInvestigation: Investigation | null
   statusFilter: InvestigationStatus | "ALL"
   severityFilter: InvestigationSeverity | "ALL"
   searchQuery: string
@@ -57,6 +72,14 @@ interface InvestigationState {
   selectedEndpoints: string[]
   selectedEvidence: EvidenceRequirement[]
   investigationConstraints: InvestigationConstraints
+
+  // Phase 4: Adaptive Execution State
+  executionStage: AdaptiveSimulationStage
+  simulationPaused: boolean
+  adaptiveSimulation: AdaptiveSimulationState
+  selectedExecutionProfiles: Record<string, AdaptiveExecutionProfile>
+  endpointDecisions: Record<string, AdaptiveDecision>
+  endpointPostures: Record<string, EndpointPosture>
 
   // Actions
   selectInvestigation: (id: string | null) => void
@@ -74,12 +97,24 @@ interface InvestigationState {
   launchAdaptiveAnalysis: (id: string) => void
   refreshTelemetry: () => void
   getInvestigationById: (id: string) => Investigation | undefined
+
+  // Adaptive Execution Actions
+  startAdaptiveAnalysis: (investigationId?: string) => void
+  advanceAdaptiveStage: () => void
+  setExecutionStage: (stage: AdaptiveSimulationStage) => void
+  calculateExecutionProfiles: (investigationId?: string) => void
+  pauseAdaptiveSimulation: () => void
+  resumeAdaptiveSimulation: () => void
+  resetAdaptiveSimulation: () => void
+  setSelectedExecutionProfile: (endpointId: string, profile: AdaptiveExecutionProfile) => void
+  beginEvidenceCollection: (investigationId?: string) => void
 }
 
 export const useInvestigationStore = create<InvestigationState>((set, get) => ({
   investigations: MOCK_INVESTIGATIONS,
   selectedInvestigationId: MOCK_INVESTIGATIONS[0]?.id ?? null,
   currentInvestigation: MOCK_INVESTIGATIONS[0] ?? null,
+  activeInvestigation: MOCK_INVESTIGATIONS[0] ?? null,
   statusFilter: "ALL",
   severityFilter: "ALL",
   searchQuery: "",
@@ -90,44 +125,79 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
   selectedEvidence: DEFAULT_BUILDER_DRAFT.evidenceRequirements,
   investigationConstraints: DEFAULT_BUILDER_DRAFT.constraints,
 
+  // Adaptive execution initial state
+  executionStage: 1,
+  simulationPaused: false,
+  selectedExecutionProfiles: initialProfiles,
+  endpointDecisions: initialDecisions,
+  endpointPostures: initialPostures,
+  adaptiveSimulation: {
+    currentStage: 1,
+    isRunning: false,
+    isPaused: false,
+    isComplete: false,
+    elapsedMs: 0,
+    stageHistory: [
+      {
+        stage: 1,
+        timestamp: new Date().toISOString(),
+        note: "System online. Ingested forensic intent and case parameters.",
+      },
+    ],
+  },
+
   selectInvestigation: (id) => {
     const inv = id ? get().investigations.find((i) => i.id === id) ?? null : null
-    set({ selectedInvestigationId: id, currentInvestigation: inv })
+    set({
+      selectedInvestigationId: id,
+      currentInvestigation: inv,
+      activeInvestigation: inv,
+    })
+    if (inv) {
+      const { profiles, decisions, postures } = deriveAllProfilesForInvestigation(inv, MOCK_ENDPOINTS)
+      set({
+        selectedExecutionProfiles: profiles,
+        endpointDecisions: decisions,
+        endpointPostures: postures,
+      })
+    }
   },
 
   setStatusFilter: (status) => set({ statusFilter: status }),
   setSeverityFilter: (severity) => set({ severityFilter: severity }),
-  setSearchQuery: (searchQuery) => set({ searchQuery }),
+  setSearchQuery: (query) => set({ searchQuery: query }),
 
   setInvestigationStatus: (id, status) => {
     set((state) => {
       const updated = state.investigations.map((inv) =>
         inv.id === id ? { ...inv, status, updatedAt: new Date().toISOString() } : inv
       )
-      const current = state.selectedInvestigationId === id 
-        ? updated.find((i) => i.id === id) ?? null 
-        : state.currentInvestigation
-      return { investigations: updated, currentInvestigation: current }
+      const current =
+        state.selectedInvestigationId === id
+          ? updated.find((i) => i.id === id) ?? null
+          : state.currentInvestigation
+      return {
+        investigations: updated,
+        currentInvestigation: current,
+        activeInvestigation: current,
+      }
     })
   },
 
   updateInvestigationStatus: (id, status) => get().setInvestigationStatus(id, status),
 
-  addInvestigation: (investigation) =>
+  addInvestigation: (investigation) => {
     set((state) => ({
       investigations: [investigation, ...state.investigations],
       selectedInvestigationId: investigation.id,
       currentInvestigation: investigation,
-      lastRefreshTimestamp: new Date().toISOString(),
-    })),
+      activeInvestigation: investigation,
+    }))
+  },
 
   createInvestigation: (customDraft) => {
-    const draft: InvestigationBuilderDraft = {
-      ...get().builderDraft,
-      ...(customDraft ?? {}),
-    }
-
-    const newId = `inv-2026-00${Math.floor(Math.random() * 90) + 10}`
+    const draft = { ...get().builderDraft, ...customDraft }
+    const newId = `inv-2026-00${get().investigations.length + 1}`
     const randomHash = Array.from({ length: 64 }, () =>
       Math.floor(Math.random() * 16).toString(16)
     ).join("")
@@ -138,48 +208,57 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
     const newInv: Investigation = {
       id: newId,
       title: draft.name,
-      caseName: draft.caseName,
       intent: draft.intent,
       description: draft.description,
       severity: draft.priority,
       status: "READY",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      initiatedBy: "Lead-Forensic-Analyst (JOCKY Builder)",
+      initiatedBy: "DFIR-LEAD-ANALYST",
       targetEndpointIds: draft.targetEndpoints,
-      progressPercentage: 0,
       evidenceCount: 0,
+      provenanceRootHash: randomHash,
+      progressPercentage: 0,
       adaptiveProfile: draft.adaptiveProfile,
+      caseName: draft.caseName,
       category: draft.category,
       evidenceRequirements: draft.evidenceRequirements,
       constraints: draft.constraints,
       jockySpec,
       jockyIR,
-      provenanceRootHash: randomHash,
       steps: [
         {
           id: `step-${newId}-1`,
           order: 1,
-          title: "Capture Process Handle Hierarchy & Memory Maps",
-          description: "Acquire thread stacks and unbacked executable allocations.",
-          actionType: "PROCESS_INTERROGATE",
+          title: "Preserve Volatile Artifacts",
+          description: "Acquire ephemeral handle tables and volatile states",
+          actionType: "EVIDENCE_COLLECT",
           status: "PENDING",
           targetEndpointIds: draft.targetEndpoints,
         },
         {
           id: `step-${newId}-2`,
           order: 2,
-          title: "Network Flow Correlation & Egress Tracing",
-          description: "Analyze anomalous socket connections and beacon frequency.",
-          actionType: "NETWORK_TRACE",
+          title: "Inspect Process Lineage",
+          description: "Correlate parent-child process relationships and signatures",
+          actionType: "PROCESS_INTERROGATE",
           status: "PENDING",
           targetEndpointIds: draft.targetEndpoints,
         },
         {
           id: `step-${newId}-3`,
           order: 3,
-          title: "Cryptographic Evidence Sealing & Merkle Leaf Minting",
-          description: "Seal collected artifacts into immutable audit trail.",
+          title: "Audit Network Socket Matrix",
+          description: "Identify rogue TCP/UDP listening states and remote sessions",
+          actionType: "NETWORK_TRACE",
+          status: "PENDING",
+          targetEndpointIds: draft.targetEndpoints,
+        },
+        {
+          id: `step-${newId}-4`,
+          order: 4,
+          title: "Seal NVPL Merkle Block",
+          description: "Generate cryptographic proof chain and seal artifacts",
           actionType: "HASH_VERIFY",
           status: "PENDING",
           targetEndpointIds: draft.targetEndpoints,
@@ -192,8 +271,16 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
       investigations: [newInv, ...state.investigations],
       selectedInvestigationId: newId,
       currentInvestigation: newInv,
-      lastRefreshTimestamp: new Date().toISOString(),
+      activeInvestigation: newInv,
     }))
+
+    // Automatically compute adaptive profiles for new investigation
+    const { profiles, decisions, postures } = deriveAllProfilesForInvestigation(newInv, MOCK_ENDPOINTS)
+    set({
+      selectedExecutionProfiles: profiles,
+      endpointDecisions: decisions,
+      endpointPostures: postures,
+    })
 
     return newInv
   },
@@ -203,10 +290,15 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
       const updated = state.investigations.map((inv) =>
         inv.id === id ? { ...inv, ...updates, updatedAt: new Date().toISOString() } : inv
       )
-      const current = state.selectedInvestigationId === id
-        ? updated.find((i) => i.id === id) ?? null
-        : state.currentInvestigation
-      return { investigations: updated, currentInvestigation: current }
+      const current =
+        state.selectedInvestigationId === id
+          ? updated.find((i) => i.id === id) ?? null
+          : state.currentInvestigation
+      return {
+        investigations: updated,
+        currentInvestigation: current,
+        activeInvestigation: current,
+      }
     })
   },
 
@@ -242,6 +334,7 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
       investigations: [duplicated, ...state.investigations],
       selectedInvestigationId: newId,
       currentInvestigation: duplicated,
+      activeInvestigation: duplicated,
     }))
 
     return duplicated
@@ -269,7 +362,8 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
   },
 
   launchAdaptiveAnalysis: (id) => {
-    get().setInvestigationStatus(id, "IN_PROGRESS")
+    get().selectInvestigation(id)
+    get().startAdaptiveAnalysis(id)
   },
 
   refreshTelemetry: () =>
@@ -290,4 +384,174 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
     })),
 
   getInvestigationById: (id) => get().investigations.find((inv) => inv.id === id),
+
+  // Phase 4: Adaptive Execution Actions
+  startAdaptiveAnalysis: (investigationId) => {
+    if (investigationId) {
+      get().selectInvestigation(investigationId)
+    }
+    const inv = get().currentInvestigation ?? get().investigations[0]
+    if (inv) {
+      const { profiles, decisions, postures } = deriveAllProfilesForInvestigation(inv, MOCK_ENDPOINTS)
+      set({
+        selectedExecutionProfiles: profiles,
+        endpointDecisions: decisions,
+        endpointPostures: postures,
+        executionStage: 1,
+        simulationPaused: false,
+        adaptiveSimulation: {
+          currentStage: 1,
+          isRunning: true,
+          isPaused: false,
+          isComplete: false,
+          elapsedMs: 0,
+          stageHistory: [
+            {
+              stage: 1,
+              timestamp: new Date().toISOString(),
+              note: "Ingested forensic intent and case parameters.",
+            },
+          ],
+        },
+      })
+    }
+  },
+
+  advanceAdaptiveStage: () => {
+    const current = get().executionStage
+    if (current < 7) {
+      const nextStage = (current + 1) as AdaptiveSimulationStage
+      const stageNotes: Record<AdaptiveSimulationStage, string> = {
+        1: "Ingested forensic intent and case parameters",
+        2: "Compiled platform-independent JOCKY IR AST",
+        3: "Evaluated target endpoint telemetry readiness and host status",
+        4: "Assessed security posture boundaries and collector restrictions",
+        5: "Derived deterministic adaptive profile mapping",
+        6: "Synthesized host-specific execution profiles and collector sequences",
+        7: "Execution profiles verified and sealed; ready for evidence collection",
+      }
+      set((state) => ({
+        executionStage: nextStage,
+        adaptiveSimulation: {
+          ...state.adaptiveSimulation,
+          currentStage: nextStage,
+          isComplete: nextStage === 7,
+          stageHistory: [
+            ...state.adaptiveSimulation.stageHistory,
+            {
+              stage: nextStage,
+              timestamp: new Date().toISOString(),
+              note: stageNotes[nextStage],
+            },
+          ],
+        },
+      }))
+    }
+  },
+
+  setExecutionStage: (stage) => {
+    set((state) => ({
+      executionStage: stage,
+      adaptiveSimulation: {
+        ...state.adaptiveSimulation,
+        currentStage: stage,
+        isComplete: stage === 7,
+      },
+    }))
+  },
+
+  calculateExecutionProfiles: (investigationId) => {
+    const inv = investigationId
+      ? get().investigations.find((i) => i.id === investigationId) ??
+        get().currentInvestigation ??
+        get().investigations[0]
+      : get().currentInvestigation ?? get().investigations[0]
+    if (!inv) return
+    const { profiles, decisions, postures } = deriveAllProfilesForInvestigation(inv, MOCK_ENDPOINTS)
+    set({
+      selectedExecutionProfiles: profiles,
+      endpointDecisions: decisions,
+      endpointPostures: postures,
+    })
+  },
+
+  pauseAdaptiveSimulation: () => {
+    set((state) => ({
+      simulationPaused: true,
+      adaptiveSimulation: {
+        ...state.adaptiveSimulation,
+        isRunning: false,
+        isPaused: true,
+      },
+    }))
+  },
+
+  resumeAdaptiveSimulation: () => {
+    set((state) => ({
+      simulationPaused: false,
+      adaptiveSimulation: {
+        ...state.adaptiveSimulation,
+        isRunning: true,
+        isPaused: false,
+      },
+    }))
+  },
+
+  resetAdaptiveSimulation: () => {
+    const inv = get().currentInvestigation ?? get().investigations[0]
+    const { profiles, decisions, postures } = deriveAllProfilesForInvestigation(inv, MOCK_ENDPOINTS)
+    set({
+      executionStage: 1,
+      simulationPaused: false,
+      selectedExecutionProfiles: profiles,
+      endpointDecisions: decisions,
+      endpointPostures: postures,
+      adaptiveSimulation: {
+        currentStage: 1,
+        isRunning: false,
+        isPaused: false,
+        isComplete: false,
+        elapsedMs: 0,
+        stageHistory: [
+          {
+            stage: 1,
+            timestamp: new Date().toISOString(),
+            note: "Simulation reset to Stage 1: Forensic Intent",
+          },
+        ],
+      },
+    })
+  },
+
+  setSelectedExecutionProfile: (endpointId, profile) => {
+    set((state) => ({
+      selectedExecutionProfiles: {
+        ...state.selectedExecutionProfiles,
+        [endpointId]: profile,
+      },
+    }))
+  },
+
+  beginEvidenceCollection: (investigationId) => {
+    const targetId =
+      investigationId ?? get().currentInvestigation?.id ?? get().investigations[0].id
+    get().setInvestigationStatus(targetId, "IN_PROGRESS")
+    set((state) => ({
+      executionStage: 7,
+      adaptiveSimulation: {
+        ...state.adaptiveSimulation,
+        currentStage: 7,
+        isRunning: false,
+        isComplete: true,
+        stageHistory: [
+          ...state.adaptiveSimulation.stageHistory,
+          {
+            stage: 7,
+            timestamp: new Date().toISOString(),
+            note: "Simulated collection initiated; transferring to Evidence Pipeline",
+          },
+        ],
+      },
+    }))
+  },
 }))
