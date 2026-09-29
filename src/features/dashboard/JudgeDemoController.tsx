@@ -115,21 +115,21 @@ export function JudgeDemoController({ onClose }: JudgeDemoControllerProps) {
   }
 
   return (
-    <div className="border-4 border-black bg-amber-400 p-4 shadow-[6px_6px_0px_#000] font-mono space-y-3">
+    <div className="border-4 border-black bg-amber-400 p-3 sm:p-4 shadow-[4px_4px_0px_#000] sm:shadow-[6px_6px_0px_#000] font-mono space-y-3 min-w-0">
       {/* Top Bar with Step counter and close */}
-      <div className="flex items-center justify-between pb-2 border-b-2 border-black">
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="p-1 bg-black text-amber-300 border border-black shadow-[1px_1px_0px_#000]">
-            <Compass className="w-4 h-4" />
+      <div className="flex items-center justify-between pb-2 border-b-2 border-black gap-2">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 min-w-0">
+          <div className="p-1 bg-black text-amber-300 border border-black shadow-[1px_1px_0px_#000] shrink-0">
+            <Compass className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
-          <span className="text-xs font-black uppercase text-black tracking-wide">
-            JUDGE DEMONSTRATION MODE // GUIDED 8-STAGE WORKFLOW
+          <span className="text-[11px] sm:text-xs font-black uppercase text-black tracking-wide truncate max-w-[180px] xs:max-w-none">
+            JUDGE DEMO // GUIDED WORKFLOW
           </span>
-          <Badge variant="dark" className="text-[10px]">
-            STAGE {activeStep.step} OF {DEMO_STEPS.length}
+          <Badge variant="dark" className="text-[9px] sm:text-[10px] py-0 px-1.5 shrink-0">
+            STAGE {activeStep.step} / {DEMO_STEPS.length}
           </Badge>
-          <span className="text-[10px] font-bold text-zinc-900 bg-amber-300 px-1.5 py-0.2 border border-black hidden sm:inline">
-            Active Case: {currentInvId}
+          <span className="text-[10px] font-bold text-zinc-900 bg-amber-300 px-1.5 py-0.2 border border-black hidden md:inline truncate">
+            Active: {currentInvId}
           </span>
         </div>
 
@@ -137,14 +137,14 @@ export function JudgeDemoController({ onClose }: JudgeDemoControllerProps) {
           type="button"
           onClick={handleClose}
           aria-label="Exit Judge Demo Mode"
-          className="p-1 border-2 border-black bg-white hover:bg-zinc-200 cursor-pointer text-xs font-black shadow-[2px_2px_0px_#000]"
+          className="p-1 border-2 border-black bg-white hover:bg-zinc-200 cursor-pointer text-xs font-black shadow-[2px_2px_0px_#000] shrink-0"
         >
-          <X className="w-4 h-4 text-black" />
+          <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black" />
         </button>
       </div>
 
       {/* Stepper Progress Bar */}
-      <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
+      <div className="grid grid-cols-4 sm:grid-cols-8 gap-1 sm:gap-1.5">
         {DEMO_STEPS.map((s, idx) => {
           const isDone = idx < judgeDemoStep
           const isCurrent = idx === judgeDemoStep
@@ -154,7 +154,7 @@ export function JudgeDemoController({ onClose }: JudgeDemoControllerProps) {
               key={s.step}
               type="button"
               onClick={() => setJudgeDemoStep(idx)}
-              className={`p-1.5 border-2 border-black text-center text-[10px] font-black cursor-pointer transition-all ${
+              className={`p-1 sm:p-1.5 border-2 border-black text-center text-[10px] font-black cursor-pointer transition-all ${
                 isCurrent
                   ? "bg-black text-amber-300 shadow-[2px_2px_0px_#000] -translate-y-0.5"
                   : isDone
@@ -169,18 +169,18 @@ export function JudgeDemoController({ onClose }: JudgeDemoControllerProps) {
       </div>
 
       {/* Current Step Card */}
-      <div className="p-3.5 bg-white border-2 border-black flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-[2px_2px_0px_#000]">
-        <div className="space-y-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-black bg-amber-300 px-2 py-0.5 border border-black">
+      <div className="p-3 sm:p-3.5 bg-white border-2 border-black flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-[2px_2px_0px_#000] min-w-0">
+        <div className="space-y-1.5 min-w-0">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <span className="text-[10px] sm:text-xs font-black bg-amber-300 px-1.5 sm:px-2 py-0.5 border border-black shrink-0">
               STAGE 0{activeStep.step}
             </span>
-            <span className="text-sm font-black text-black">
+            <span className="text-xs sm:text-sm font-black text-black">
               {activeStep.title}
             </span>
-            <span className="text-[10px] font-bold text-zinc-600 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-amber-600" />
-              <span>{activeStep.whatJudgeSees}</span>
+            <span className="text-[10px] font-bold text-zinc-600 flex items-center gap-1 w-full sm:w-auto">
+              <Sparkles className="w-3 h-3 text-amber-600 shrink-0" />
+              <span className="truncate">{activeStep.whatJudgeSees}</span>
             </span>
           </div>
 
@@ -189,7 +189,7 @@ export function JudgeDemoController({ onClose }: JudgeDemoControllerProps) {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0 pt-1 lg:pt-0">
           {judgeDemoStep > 0 && (
             <button
               type="button"

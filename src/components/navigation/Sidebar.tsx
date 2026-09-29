@@ -84,14 +84,17 @@ export function Sidebar() {
           tabIndex={-1}
           aria-label="Close sidebar backdrop"
           onClick={toggleSidebar}
-          className="fixed inset-0 bg-black/50 backdrop-blur-xs z-25 md:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-35 md:hidden"
         />
       )}
 
       <aside
         className={cn(
-          "relative flex flex-col border-r-4 border-black bg-zinc-100 transition-all duration-200 select-none z-30 shrink-0",
-          isSidebarOpen ? "w-64" : "w-0 md:w-20 overflow-hidden md:overflow-visible border-r-0 md:border-r-4"
+          "flex flex-col border-r-4 border-black bg-zinc-100 transition-all duration-200 select-none shrink-0 h-full",
+          "fixed inset-y-0 left-0 z-40 md:relative",
+          isSidebarOpen
+            ? "w-64 translate-x-0 shadow-[4px_0px_0px_#000] md:shadow-none"
+            : "-translate-x-full md:translate-x-0 w-64 md:w-20 overflow-hidden md:overflow-visible border-r-0 md:border-r-4"
         )}
       >
       {/* Branding Header */}

@@ -24,8 +24,8 @@ export function AppShell({ children }: AppShellProps) {
         <Header />
 
         {/* Scrollable Page Canvas */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 bg-[#F4F4F0] bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:16px_16px]">
-          <div className="max-w-7xl mx-auto space-y-6">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 xs:p-4 sm:p-6 md:p-8 bg-[#F4F4F0] bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:16px_16px]">
+          <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 min-w-0 w-full">
             {isJudgeDemoActive && <JudgeDemoController />}
             {children}
           </div>
