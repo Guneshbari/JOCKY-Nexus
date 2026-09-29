@@ -1,17 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" fill="none">
-  <!-- Badge Container with Hard Shadow -->
-  <rect x="6" y="6" width="52" height="52" fill="#000000" rx="4" />
-  <rect x="2" y="2" width="52" height="52" fill="#FACC15" stroke="#000000" stroke-width="3" rx="4" />
-  
-  <!-- Forensic Crosshair / Node Icon -->
-  <rect x="12" y="12" width="32" height="32" fill="#00F0FF" stroke="#000000" stroke-width="2.5" rx="2" />
-  <line x1="28" y1="8" x2="28" y2="48" stroke="#000000" stroke-width="3" />
-  <line x1="8" y1="28" x2="48" y2="28" stroke="#000000" stroke-width="3" />
-  <circle cx="28" cy="28" r="5" fill="#FF3366" stroke="#000000" stroke-width="2" />
-  
-  <!-- Text Brand -->
-  <text x="68" y="32" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="24" letter-spacing="0.05em" fill="#000000">JOCKY</text>
-  <rect x="165" y="14" width="98" height="24" fill="#000000" rx="2" />
-  <text x="172" y="31" font-family="monospace, monospace" font-weight="800" font-size="16" letter-spacing="0.1em" fill="#00F0FF">NEXUS</text>
-  <text x="69" y="48" font-family="monospace, monospace" font-weight="600" font-size="9" letter-spacing="0.15em" fill="#52525B">ADAPTIVE FORENSIC ENGINE</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 68" fill="none">
+  <!-- Defs: Gradients and filters for high-impact styling -->
+  <defs>
+    <linearGradient id="nexusCyanGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+    <linearGradient id="amberGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#EAB308" />
+    </linearGradient>
+  </defs>
+
+  <!-- ==================== LOGO ICON MARK (Left) ==================== -->
+  <g transform="translate(6, 2)">
+    <!-- Hard Brutalist Drop Shadow -->
+    <polygon points="36,6 62,20 62,48 36,62 10,48 10,20" fill="#000000" />
+
+    <!-- Shield Base Body -->
+    <polygon points="32,3 58,17 58,45 32,59 6,45 6,17" fill="#090D16" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+
+    <!-- Inner Cyber Hexagon Facet -->
+    <polygon points="32,6 54,19 54,43 32,55 10,43 10,19" fill="#0F172A" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.3" stroke-linejoin="round" />
+
+    <!-- 'J' Monogram Glyph (Electric Amber / Gold) -->
+    <path d="M14 16 H28 V22 H22 V36 C22 41 19 44.5 14 44.5 C10 44.5 7.5 42 7.5 38.5 H13.5 C13.5 39.8 14.2 40.5 15.2 40.5 C16.5 40.5 17.2 39.2 17.2 36 V16 H14 Z" 
+          fill="url(#amberGlow)" 
+          stroke="#000000" 
+          stroke-width="1.8" 
+          stroke-linejoin="miter" />
+
+    <!-- 'N' (Nexus) Lattice Stem & Diagonal (Hyper Cyan) -->
+    <path d="M26 16 L42 41 V16 H48 V46 H42 L26 21 V46 H20 V41 L33 21 H26 V16 Z" 
+          fill="url(#nexusCyanGlow)" 
+          stroke="#000000" 
+          stroke-width="1.8" 
+          stroke-linejoin="miter" />
+
+    <!-- Central Nexus Core Crosshair / Forensic Focus -->
+    <circle cx="34" cy="31" r="5" fill="#000000" stroke="#00F0FF" stroke-width="1.5" />
+    <circle cx="34" cy="31" r="2.5" fill="#FF1E56" />
+
+    <!-- Crosshair Reticle Laser Ticks -->
+    <line x1="34" y1="22" x2="34" y2="25" stroke="#FACC15" stroke-width="2" stroke-linecap="square" />
+    <line x1="34" y1="37" x2="34" y2="40" stroke="#FACC15" stroke-width="2" stroke-linecap="square" />
+    <line x1="25" y1="31" x2="28" y2="31" stroke="#00F0FF" stroke-width="2" stroke-linecap="square" />
+    <line x1="40" y1="31" x2="43" y2="31" stroke="#00F0FF" stroke-width="2" stroke-linecap="square" />
+
+    <!-- Corner Registration Marks -->
+    <path d="M10 17 L14 17 M10 17 L10 21" stroke="#FACC15" stroke-width="1.5" stroke-linecap="square" />
+    <path d="M54 17 L50 17 M54 17 L54 21" stroke="#00F0FF" stroke-width="1.5" stroke-linecap="square" />
+    <path d="M32 55 L32 58" stroke="#FF1E56" stroke-width="2" stroke-linecap="square" />
+  </g>
+
+  <!-- ==================== TYPOGRAPHY (Right) ==================== -->
+  <g transform="translate(80, 0)">
+    <!-- Primary Brand Word: JOCKY -->
+    <text x="0" y="36" 
+          font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" 
+          font-weight="900" 
+          font-size="28" 
+          letter-spacing="0.04em" 
+          fill="#000000">
+      JOCKY
+    </text>
+
+    <!-- NEXUS Badge Box with Neo-Brutalist Shadow -->
+    <rect x="114" y="14" width="102" height="26" fill="#000000" rx="3" />
+    <rect x="112" y="12" width="102" height="26" fill="#090D16" stroke="#000000" stroke-width="2" rx="3" />
+    
+    <!-- NEXUS Badge Text -->
+    <text x="123" y="30" 
+          font-family="'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace" 
+          font-weight="900" 
+          font-size="16" 
+          letter-spacing="0.16em" 
+          fill="#00F0FF">
+      NEXUS
+    </text>
+
+    <!-- Subtitle / Platform Mission -->
+    <g transform="translate(2, 52)">
+      <!-- Micro Indicator Dot -->
+      <circle cx="2" cy="-4" r="2.5" fill="#FF1E56" />
+      <text x="10" y="0" 
+            font-family="'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace" 
+            font-weight="800" 
+            font-size="9" 
+            letter-spacing="0.14em" 
+            fill="#3F3F46">
+        ADAPTIVE DIGITAL FORENSICS &amp; EVIDENCE
+      </text>
+    </g>
+  </g>
 </svg>

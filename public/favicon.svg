@@ -1,8 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="10" fill="#090D16" />
-  <rect x="4" y="4" width="56" height="56" rx="8" fill="#FACC15" stroke="#000000" stroke-width="4" />
-  <!-- Shadow offset element -->
-  <rect x="12" y="12" width="40" height="40" rx="4" fill="#00F0FF" stroke="#000000" stroke-width="3" />
-  <path d="M22 20H42V28H36V44H28V28H22V20Z" fill="#000000" />
-  <circle cx="44" cy="44" r="6" fill="#FF3366" stroke="#000000" stroke-width="2.5" />
+  <!-- Hard Brutalist Shadow -->
+  <polygon points="36,6 62,20 62,48 36,62 10,48 10,20" fill="#000000" />
+
+  <!-- Shield Base Body -->
+  <polygon points="32,3 58,17 58,45 32,59 6,45 6,17" fill="#090D16" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+
+  <!-- Inner Cyber Grid / Facet Accents -->
+  <polygon points="32,6 54,19 54,43 32,55 10,43 10,19" fill="#131B2E" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.3" stroke-linejoin="round" />
+
+  <!-- 'J' Monogram Glyph (Electric Amber / Gold) -->
+  <!-- Upper serif & stem hooking left-to-bottom -->
+  <path d="M14 16 H28 V22 H22 V36 C22 41 19 44.5 14 44.5 C10 44.5 7.5 42 7.5 38.5 H13.5 C13.5 39.8 14.2 40.5 15.2 40.5 C16.5 40.5 17.2 39.2 17.2 36 V16 H14 Z" 
+        fill="#FACC15" 
+        stroke="#000000" 
+        stroke-width="1.8" 
+        stroke-linejoin="miter" />
+
+  <!-- 'N' (Nexus) Lattice Stem & Diagonal (Hyper Cyan) -->
+  <!-- Center diagonal slash crossing from top-left to bottom-right -->
+  <path d="M26 16 L42 41 V16 H48 V46 H42 L26 21 V46 H20 V41 L33 21 H26 V16 Z" 
+        fill="#00F0FF" 
+        stroke="#000000" 
+        stroke-width="1.8" 
+        stroke-linejoin="miter" />
+
+  <!-- Central Nexus Core Crosshair / Forensic Focus -->
+  <circle cx="34" cy="31" r="5" fill="#000000" stroke="#00F0FF" stroke-width="1.5" />
+  <circle cx="34" cy="31" r="2.5" fill="#FF1E56" />
+
+  <!-- Crosshair Reticle Laser Ticks -->
+  <line x1="34" y1="22" x2="34" y2="25" stroke="#FACC15" stroke-width="2" stroke-linecap="square" />
+  <line x1="34" y1="37" x2="34" y2="40" stroke="#FACC15" stroke-width="2" stroke-linecap="square" />
+  <line x1="25" y1="31" x2="28" y2="31" stroke="#00F0FF" stroke-width="2" stroke-linecap="square" />
+  <line x1="40" y1="31" x2="43" y2="31" stroke="#00F0FF" stroke-width="2" stroke-linecap="square" />
+
+  <!-- Corner Forensic Registration Marks -->
+  <path d="M10 17 L14 17 M10 17 L10 21" stroke="#FACC15" stroke-width="1.5" stroke-linecap="square" />
+  <path d="M54 17 L50 17 M54 17 L54 21" stroke="#00F0FF" stroke-width="1.5" stroke-linecap="square" />
+  <path d="M32 55 L32 58" stroke="#FF1E56" stroke-width="2" stroke-linecap="square" />
 </svg>
