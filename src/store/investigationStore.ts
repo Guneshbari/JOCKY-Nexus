@@ -13,14 +13,23 @@ import {
   AdaptiveSimulationStage,
   AdaptiveSimulationState,
   EndpointPosture,
+  AdaptiveProfileId,
 } from "@/types/execution"
+import {
+  EvidenceArtifact,
+  EvidenceClass,
+  EvidenceWorkflowStage,
+  CollectionSimulationState,
+} from "@/types/evidence"
 import { MOCK_INVESTIGATIONS } from "@/data/investigations"
 import { MOCK_ENDPOINTS } from "@/data/endpoints"
+import { MOCK_EVIDENCE } from "@/data/evidence"
 import {
   generateJockySpecification,
   generateJockyIR,
 } from "@/lib/jockyGenerator"
 import { deriveAllProfilesForInvestigation } from "@/lib/adaptivePlanner"
+import { generateSimulatedEvidenceForInvestigation } from "@/lib/evidenceGenerator"
 
 export const DEFAULT_CONSTRAINTS: InvestigationConstraints = {
   volatileEvidencePriority: true,
@@ -56,6 +65,23 @@ const initialInvestigation = MOCK_INVESTIGATIONS[0]
 const { profiles: initialProfiles, decisions: initialDecisions, postures: initialPostures } =
   deriveAllProfilesForInvestigation(initialInvestigation, MOCK_ENDPOINTS)
 
+export interface EvidenceFilterState {
+  searchQuery: string
+  endpointFilter: string | "ALL"
+  evidenceClassFilter: EvidenceClass | "ALL"
+  integrityFilter: "ALL" | "VERIFIED" | "PENDING"
+  profileFilter: AdaptiveProfileId | "ALL"
+  mitreFilter: string | "ALL"
+}
+
+export interface ProvenanceState {
+  isSealed: boolean
+  merkleRoot: string
+  blockHeight: number
+  chainIntegrity: "VERIFIED" | "TAMPERED" | "PENDING"
+  lastSealedTimestamp: string
+}
+
 interface InvestigationState {
   // Collections & Active State
   investigations: Investigation[]
@@ -80,6 +106,14 @@ interface InvestigationState {
   selectedExecutionProfiles: Record<string, AdaptiveExecutionProfile>
   endpointDecisions: Record<string, AdaptiveDecision>
   endpointPostures: Record<string, EndpointPosture>
+
+  // Phase 5: Evidence Intelligence State
+  evidenceItems: EvidenceArtifact[]
+  selectedEvidenceId: string | null
+  activeEvidence: EvidenceArtifact | null
+  evidenceFilters: EvidenceFilterState
+  collectionSimulation: CollectionSimulationState
+  provenanceState: ProvenanceState
 
   // Actions
   selectInvestigation: (id: string | null) => void
@@ -108,6 +142,19 @@ interface InvestigationState {
   resetAdaptiveSimulation: () => void
   setSelectedExecutionProfile: (endpointId: string, profile: AdaptiveExecutionProfile) => void
   beginEvidenceCollection: (investigationId?: string) => void
+
+  // Phase 5: Evidence Intelligence Actions
+  startEvidenceCollection: (investigationId?: string) => void
+  advanceCollectionStage: () => void
+  setCollectionStage: (stage: EvidenceWorkflowStage) => void
+  pauseEvidenceSimulation: () => void
+  resumeEvidenceSimulation: () => void
+  resetEvidenceSimulation: () => void
+  generateSimulatedEvidence: (investigationId?: string) => void
+  selectEvidence: (id: string | null) => void
+  setEvidenceFilter: (filters: Partial<EvidenceFilterState>) => void
+  resetEvidenceFilters: () => void
+  completeEvidenceCollection: () => void
 }
 
 export const useInvestigationStore = create<InvestigationState>((set, get) => ({
@@ -146,6 +193,43 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
     ],
   },
 
+  // Evidence Intelligence initial state
+  evidenceItems: MOCK_EVIDENCE,
+  selectedEvidenceId: MOCK_EVIDENCE[0]?.id ?? null,
+  activeEvidence: MOCK_EVIDENCE[0] ?? null,
+  evidenceFilters: {
+    searchQuery: "",
+    endpointFilter: "ALL",
+    evidenceClassFilter: "ALL",
+    integrityFilter: "ALL",
+    profileFilter: "ALL",
+    mitreFilter: "ALL",
+  },
+  collectionSimulation: {
+    currentStage: 6,
+    isRunning: false,
+    isPaused: false,
+    isComplete: true,
+    totalArtifacts: MOCK_EVIDENCE.length,
+    verifiedArtifacts: MOCK_EVIDENCE.length,
+    activeStepName: "Sealed & Verified",
+    stageHistory: [
+      { stage: 1, timestamp: new Date(Date.now() - 3600000).toISOString(), title: "Collection", note: "Simulated artifacts harvested from adaptive profiles" },
+      { stage: 2, timestamp: new Date(Date.now() - 3500000).toISOString(), title: "Normalization", note: "Standardized into common JOCKY evidence schema" },
+      { stage: 3, timestamp: new Date(Date.now() - 3400000).toISOString(), title: "Integrity Seal", note: "Computed simulated SHA-256 integrity block seals" },
+      { stage: 4, timestamp: new Date(Date.now() - 3300000).toISOString(), title: "Provenance Binding", note: "Chained into immutable non-volatile ledger" },
+      { stage: 5, timestamp: new Date(Date.now() - 3200000).toISOString(), title: "MITRE Correlation", note: "Corroborated against MITRE ATT&CK techniques" },
+      { stage: 6, timestamp: new Date(Date.now() - 3100000).toISOString(), title: "Verified Evidence", note: "100% evidence verified and court-admissible" },
+    ],
+  },
+  provenanceState: {
+    isSealed: true,
+    merkleRoot: MOCK_INVESTIGATIONS[0].provenanceRootHash,
+    blockHeight: 1045,
+    chainIntegrity: "VERIFIED",
+    lastSealedTimestamp: new Date().toISOString(),
+  },
+
   selectInvestigation: (id) => {
     const inv = id ? get().investigations.find((i) => i.id === id) ?? null : null
     set({
@@ -155,10 +239,24 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
     })
     if (inv) {
       const { profiles, decisions, postures } = deriveAllProfilesForInvestigation(inv, MOCK_ENDPOINTS)
+      // Check or generate evidence for this investigation
+      const generated = generateSimulatedEvidenceForInvestigation(inv, profiles, MOCK_ENDPOINTS)
+      const existingIds = new Set(get().evidenceItems.map((e) => e.id))
+      const merged = [
+        ...get().evidenceItems,
+        ...generated.filter((g) => !existingIds.has(g.id)),
+      ]
+
       set({
         selectedExecutionProfiles: profiles,
         endpointDecisions: decisions,
         endpointPostures: postures,
+        evidenceItems: merged,
+        activeEvidence: merged.find((e) => e.investigationId === inv.id) ?? merged[0] ?? null,
+        provenanceState: {
+          ...get().provenanceState,
+          merkleRoot: inv.provenanceRootHash,
+        },
       })
     }
   },
@@ -274,13 +372,17 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
       activeInvestigation: newInv,
     }))
 
-    // Automatically compute adaptive profiles for new investigation
+    // Automatically compute adaptive profiles and evidence for new investigation
     const { profiles, decisions, postures } = deriveAllProfilesForInvestigation(newInv, MOCK_ENDPOINTS)
-    set({
+    const generatedEvidence = generateSimulatedEvidenceForInvestigation(newInv, profiles, MOCK_ENDPOINTS)
+
+    set((state) => ({
       selectedExecutionProfiles: profiles,
       endpointDecisions: decisions,
       endpointPostures: postures,
-    })
+      evidenceItems: [...generatedEvidence, ...state.evidenceItems],
+      activeEvidence: generatedEvidence[0] ?? state.activeEvidence,
+    }))
 
     return newInv
   },
@@ -536,22 +638,208 @@ export const useInvestigationStore = create<InvestigationState>((set, get) => ({
     const targetId =
       investigationId ?? get().currentInvestigation?.id ?? get().investigations[0].id
     get().setInvestigationStatus(targetId, "IN_PROGRESS")
-    set((state) => ({
-      executionStage: 7,
-      adaptiveSimulation: {
-        ...state.adaptiveSimulation,
-        currentStage: 7,
-        isRunning: false,
-        isComplete: true,
+    get().generateSimulatedEvidence(targetId)
+    get().startEvidenceCollection(targetId)
+  },
+
+  // Phase 5: Evidence Intelligence Actions
+  startEvidenceCollection: (investigationId) => {
+    const inv = investigationId
+      ? get().investigations.find((i) => i.id === investigationId) ?? get().currentInvestigation ?? get().investigations[0]
+      : get().currentInvestigation ?? get().investigations[0]
+
+    const invEvidence = get().evidenceItems.filter((e) => e.investigationId === inv.id)
+    const count = invEvidence.length > 0 ? invEvidence.length : 3
+
+    set({
+      collectionSimulation: {
+        currentStage: 1,
+        isRunning: true,
+        isPaused: false,
+        isComplete: false,
+        totalArtifacts: count,
+        verifiedArtifacts: 0,
+        activeStepName: "1. Collecting Endpoint Artifacts",
         stageHistory: [
-          ...state.adaptiveSimulation.stageHistory,
           {
-            stage: 7,
+            stage: 1,
             timestamp: new Date().toISOString(),
-            note: "Simulated collection initiated; transferring to Evidence Pipeline",
+            title: "Collection Initialized",
+            note: `Harvesting simulated telemetry from ${inv.targetEndpointIds.length} target hosts.`,
           },
         ],
       },
+    })
+  },
+
+  advanceCollectionStage: () => {
+    const current = get().collectionSimulation.currentStage
+    const total = get().collectionSimulation.totalArtifacts
+
+    if (current < 6) {
+      const nextStage = (current + 1) as EvidenceWorkflowStage
+      const stepNames: Record<EvidenceWorkflowStage, string> = {
+        1: "1. Harvesting Adaptive Collectors",
+        2: "2. Normalizing Evidence Schema",
+        3: "3. Generating SHA-256 Seals",
+        4: "4. Binding NVPL Provenance",
+        5: "5. Correlating MITRE ATT&CK",
+        6: "6. Verified & Court Admissible",
+      }
+      const stageNotes: Record<EvidenceWorkflowStage, string> = {
+        1: "Simulated artifacts collected across Windows and Linux targets.",
+        2: "Raw telemetry normalized into structured JOCKY evidence classes.",
+        3: "Cryptographic SHA-256 integrity digests computed and sealed.",
+        4: "Artifacts anchored into append-only cryptographic provenance ledger.",
+        5: "Corroborated observations mapped against MITRE ATT&CK techniques.",
+        6: "All artifacts verified with zero integrity violations.",
+      }
+
+      set((state) => ({
+        collectionSimulation: {
+          ...state.collectionSimulation,
+          currentStage: nextStage,
+          isComplete: nextStage === 6,
+          isRunning: nextStage < 6,
+          verifiedArtifacts: nextStage === 6 ? total : Math.floor((total * nextStage) / 6),
+          activeStepName: stepNames[nextStage],
+          stageHistory: [
+            ...state.collectionSimulation.stageHistory,
+            {
+              stage: nextStage,
+              timestamp: new Date().toISOString(),
+              title: stepNames[nextStage],
+              note: stageNotes[nextStage],
+            },
+          ],
+        },
+      }))
+
+      if (nextStage === 6) {
+        get().completeEvidenceCollection()
+      }
+    }
+  },
+
+  setCollectionStage: (stage) => {
+    set((state) => ({
+      collectionSimulation: {
+        ...state.collectionSimulation,
+        currentStage: stage,
+        isComplete: stage === 6,
+      },
+    }))
+  },
+
+  pauseEvidenceSimulation: () => {
+    set((state) => ({
+      collectionSimulation: {
+        ...state.collectionSimulation,
+        isRunning: false,
+        isPaused: true,
+      },
+    }))
+  },
+
+  resumeEvidenceSimulation: () => {
+    set((state) => ({
+      collectionSimulation: {
+        ...state.collectionSimulation,
+        isRunning: true,
+        isPaused: false,
+      },
+    }))
+  },
+
+  resetEvidenceSimulation: () => {
+    const inv = get().currentInvestigation ?? get().investigations[0]
+    const invEvidence = get().evidenceItems.filter((e) => e.investigationId === inv.id)
+    set({
+      collectionSimulation: {
+        currentStage: 1,
+        isRunning: false,
+        isPaused: false,
+        isComplete: false,
+        totalArtifacts: invEvidence.length || 3,
+        verifiedArtifacts: 0,
+        activeStepName: "1. Ready to Collect",
+        stageHistory: [
+          {
+            stage: 1,
+            timestamp: new Date().toISOString(),
+            title: "Simulation Reset",
+            note: "Reset evidence pipeline to Stage 1.",
+          },
+        ],
+      },
+    })
+  },
+
+  generateSimulatedEvidence: (investigationId) => {
+    const inv = investigationId
+      ? get().investigations.find((i) => i.id === investigationId) ?? get().currentInvestigation ?? get().investigations[0]
+      : get().currentInvestigation ?? get().investigations[0]
+    if (!inv) return
+
+    const { profiles } = deriveAllProfilesForInvestigation(inv, MOCK_ENDPOINTS)
+    const generated = generateSimulatedEvidenceForInvestigation(inv, profiles, MOCK_ENDPOINTS)
+    const existingIds = new Set(get().evidenceItems.map((e) => e.id))
+    const merged = [
+      ...get().evidenceItems,
+      ...generated.filter((g) => !existingIds.has(g.id)),
+    ]
+
+    set({
+      evidenceItems: merged,
+      activeEvidence: generated[0] ?? get().activeEvidence,
+    })
+  },
+
+  selectEvidence: (id) => {
+    const found = id ? get().evidenceItems.find((e) => e.id === id) ?? null : null
+    set({
+      selectedEvidenceId: id,
+      activeEvidence: found,
+    })
+  },
+
+  setEvidenceFilter: (filters) => {
+    set((state) => ({
+      evidenceFilters: {
+        ...state.evidenceFilters,
+        ...filters,
+      },
+    }))
+  },
+
+  resetEvidenceFilters: () => {
+    set({
+      evidenceFilters: {
+        searchQuery: "",
+        endpointFilter: "ALL",
+        evidenceClassFilter: "ALL",
+        integrityFilter: "ALL",
+        profileFilter: "ALL",
+        mitreFilter: "ALL",
+      },
+    })
+  },
+
+  completeEvidenceCollection: () => {
+    const inv = get().currentInvestigation ?? get().investigations[0]
+    get().setInvestigationStatus(inv.id, "COMPLETED")
+    set((state) => ({
+      provenanceState: {
+        ...state.provenanceState,
+        isSealed: true,
+        chainIntegrity: "VERIFIED",
+        lastSealedTimestamp: new Date().toISOString(),
+      },
+      evidenceItems: state.evidenceItems.map((item) =>
+        item.investigationId === inv.id
+          ? { ...item, integrityVerified: true, integrityStatus: "VERIFIED", provenanceStatus: "SEALED" }
+          : item
+      ),
     }))
   },
 }))
